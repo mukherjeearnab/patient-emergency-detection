@@ -1,0 +1,223 @@
+version: "2"
+
+volumes:
+    orderer0.lean.com:
+    peer0.citizen.lean.com:
+    peer0.police.lean.com:
+    peer0.forensics.lean.com:
+    peer0.court.lean.com:
+    peer0.identityprovider.lean.com:
+    caCitizen:
+    caPolice:
+    caForensics:
+    caCourt:
+    caIdentityProvider:
+
+networks:
+    leannet:
+
+services:
+    orderer0.lean.com:
+        extends:
+            file: base/docker-compose-base.yaml
+            service: orderer0.lean.com
+        container_name: orderer0.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - caCitizen
+            - caPolice
+            - caForensics
+            - caCourt
+            - caIdentityProvider
+
+    peer0.citizen.lean.com:
+        container_name: peer0.citizen.lean.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.citizen.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - orderer0.lean.com
+            - couchdb.peer0.citizen.lean.com
+
+    peer0.police.lean.com:
+        container_name: peer0.police.lean.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.police.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - orderer0.lean.com
+            - couchdb.peer0.police.lean.com
+
+    peer0.forensics.lean.com:
+        container_name: peer0.forensics.lean.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.forensics.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - orderer0.lean.com
+            - couchdb.peer0.forensics.lean.com
+
+    peer0.court.lean.com:
+        container_name: peer0.court.lean.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.court.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - orderer0.lean.com
+            - couchdb.peer0.court.lean.com
+
+    peer0.identityprovider.lean.com:
+        container_name: peer0.identityprovider.lean.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer0.identityprovider.lean.com
+        networks:
+            - leannet
+        depends_on:
+            - orderer0.lean.com
+            - couchdb.peer0.identityprovider.lean.com
+
+    caCitizen:
+        container_name: caCitizen
+        extends:
+            file: base/docker-compose-base.yaml
+            service: caCitizen
+        networks:
+            - leannet
+
+    caPolice:
+        container_name: caPolice
+        extends:
+            file: base/docker-compose-base.yaml
+            service: caPolice
+        networks:
+            - leannet
+
+    caForensics:
+        container_name: caForensics
+        extends:
+            file: base/docker-compose-base.yaml
+            service: caForensics
+        networks:
+            - leannet
+
+    caCourt:
+        container_name: caCourt
+        extends:
+            file: base/docker-compose-base.yaml
+            service: caCourt
+        networks:
+            - leannet
+
+    caIdentityProvider:
+        container_name: caIdentityProvider
+        extends:
+            file: base/docker-compose-base.yaml
+            service: caIdentityProvider
+        networks:
+            - leannet
+
+    couchdb.peer0.citizen.lean.com:
+        container_name: couchdb.peer0.citizen.lean.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "5984:5984"
+        networks:
+            - leannet
+
+    couchdb.peer0.police.lean.com:
+        container_name: couchdb.peer0.police.lean.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "6984:5984"
+        networks:
+            - leannet
+
+    couchdb.peer0.forensics.lean.com:
+        container_name: couchdb.peer0.forensics.lean.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "7984:5984"
+        networks:
+            - leannet
+
+    couchdb.peer0.court.lean.com:
+        container_name: couchdb.peer0.court.lean.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "8984:5984"
+        networks:
+            - leannet
+
+    couchdb.peer0.identityprovider.lean.com:
+        container_name: couchdb.peer0.identityprovider.lean.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "9984:5984"
+        networks:
+            - leannet
+
+    cli:
+        container_name: cli
+        image: hyperledger/fabric-tools:$IMAGE_TAG
+        tty: true
+        stdin_open: true
+        environment:
+            - GOPATH=/opt/gopath
+            - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+            #- FABRIC_LOGGING_SPEC=DEBUG
+            - FABRIC_LOGGING_SPEC=INFO
+            - CORE_PEER_ID=cli
+            - CORE_PEER_ADDRESS=peer0.citizen.lean.com:7051
+            - CORE_PEER_LOCALMSPID=CitizenMSP
+            - CORE_PEER_TLS_ENABLED=true
+            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/server.crt
+            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/server.key
+            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/ca.crt
+            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/users/Admin@citizen.lean.com/msp
+        working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+        command: /bin/bash
+        volumes:
+            - /var/run/:/host/var/run/
+            - ./../chaincode/:/opt/gopath/src/
+            - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+            - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+            - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+        depends_on:
+            - orderer0.lean.com
+            - peer0.citizen.lean.com
+            - peer0.police.lean.com
+            - peer0.forensics.lean.com
+            - peer0.court.lean.com
+            - peer0.identityprovider.lean.com
+            - caCitizen
+            - caPolice
+            - caForensics
+            - caCourt
+            - caIdentityProvider
+        networks:
+            - leannet
