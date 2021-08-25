@@ -9,7 +9,7 @@ docker exec -it cli bash ./scripts/channel/join-peer.sh peer0 phc PHCMSP 8051 1.
 docker exec -it cli bash ./scripts/channel/join-peer.sh peer0 hospital HospitalMSP 9051 1.0
 docker exec -it cli bash ./scripts/channel/join-peer.sh peer0 healthadmin HealthAdminMSP 10051 1.0
 
-CC_NAMES=$(ls ../chaincode/*_cc $CCDIR)
+CC_NAMES=$(ls ../chaincode/ | grep _cc)
 
 for CC in $CC_NAMES; do
     echo "Installing "$CC
