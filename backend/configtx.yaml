@@ -3,7 +3,7 @@ Organizations:
     - &OrdererOrg
       Name: OrdererOrg
       ID: OrdererMSP
-      MSPDir: crypto-config/ordererOrganizations/lean.com/msp
+      MSPDir: crypto-config/ordererOrganizations/health.com/msp
       Policies:
           Readers:
               Type: Signature
@@ -15,80 +15,65 @@ Organizations:
               Type: Signature
               Rule: "OR('OrdererMSP.admin')"
 
-    - &Citizen
-      Name: CitizenMSP
-      ID: CitizenMSP
-      MSPDir: crypto-config/peerOrganizations/citizen.lean.com/msp
+    - &Patient
+      Name: PatientMSP
+      ID: PatientMSP
+      MSPDir: crypto-config/peerOrganizations/patient.health.com/msp
       Policies:
           Readers:
               Type: Signature
-              Rule: "OR('CitizenMSP.admin', 'CitizenMSP.peer', 'CitizenMSP.client')"
+              Rule: "OR('PatientMSP.admin', 'PatientMSP.peer', 'PatientMSP.client')"
           Writers:
               Type: Signature
-              Rule: "OR('CitizenMSP.admin', 'CitizenMSP.client')"
+              Rule: "OR('PatientMSP.admin', 'PatientMSP.client')"
           Admins:
               Type: Signature
-              Rule: "OR('CitizenMSP.admin')"
+              Rule: "OR('PatientMSP.admin')"
 
-    - &Police
-      Name: PoliceMSP
-      ID: PoliceMSP
-      MSPDir: crypto-config/peerOrganizations/police.lean.com/msp
+    - &PHC
+      Name: PHCMSP
+      ID: PHCMSP
+      MSPDir: crypto-config/peerOrganizations/phc.health.com/msp
       Policies:
           Readers:
               Type: Signature
-              Rule: "OR('PoliceMSP.admin', 'PoliceMSP.peer', 'PoliceMSP.client')"
+              Rule: "OR('PHCMSP.admin', 'PHCMSP.peer', 'PHCMSP.client')"
           Writers:
               Type: Signature
-              Rule: "OR('PoliceMSP.admin', 'PoliceMSP.client')"
+              Rule: "OR('PHCMSP.admin', 'PHCMSP.client')"
           Admins:
               Type: Signature
-              Rule: "OR('PoliceMSP.admin')"
+              Rule: "OR('PHCMSP.admin')"
 
-    - &Forensics
-      Name: ForensicsMSP
-      ID: ForensicsMSP
-      MSPDir: crypto-config/peerOrganizations/forensics.lean.com/msp
+    - &Hospital
+      Name: HospitalMSP
+      ID: HospitalMSP
+      MSPDir: crypto-config/peerOrganizations/hospital.health.com/msp
       Policies:
           Readers:
               Type: Signature
-              Rule: "OR('ForensicsMSP.admin', 'ForensicsMSP.peer', 'ForensicsMSP.client')"
+              Rule: "OR('HospitalMSP.admin', 'HospitalMSP.peer', 'HospitalMSP.client')"
           Writers:
               Type: Signature
-              Rule: "OR('ForensicsMSP.admin', 'ForensicsMSP.client')"
+              Rule: "OR('HospitalMSP.admin', 'HospitalMSP.client')"
           Admins:
               Type: Signature
-              Rule: "OR('ForensicsMSP.admin')"
+              Rule: "OR('HospitalMSP.admin')"
 
-    - &Court
-      Name: CourtMSP
-      ID: CourtMSP
-      MSPDir: crypto-config/peerOrganizations/court.lean.com/msp
+    - &HealthAdmin
+      Name: HealthAdminMSP
+      ID: HealthAdminMSP
+      MSPDir: crypto-config/peerOrganizations/healthadmin.health.com/msp
       Policies:
           Readers:
               Type: Signature
-              Rule: "OR('CourtMSP.admin', 'CourtMSP.peer', 'CourtMSP.client')"
+              Rule: "OR('HealthAdminMSP.admin', 'HealthAdminMSP.peer', 'HealthAdminMSP.client')"
           Writers:
               Type: Signature
-              Rule: "OR('CourtMSP.admin', 'CourtMSP.client')"
+              Rule: "OR('HealthAdminMSP.admin', 'HealthAdminMSP.client')"
           Admins:
               Type: Signature
-              Rule: "OR('CourtMSP.admin')"
-
-    - &IdentityProvider
-      Name: IdentityProviderMSP
-      ID: IdentityProviderMSP
-      MSPDir: crypto-config/peerOrganizations/identityprovider.lean.com/msp
-      Policies:
-          Readers:
-              Type: Signature
-              Rule: "OR('IdentityProviderMSP.admin', 'IdentityProviderMSP.peer', 'IdentityProviderMSP.client')"
-          Writers:
-              Type: Signature
-              Rule: "OR('IdentityProviderMSP.admin', 'IdentityProviderMSP.client')"
-          Admins:
-              Type: Signature
-              Rule: "OR('IdentityProviderMSP.admin')"
+              Rule: "OR('HealthAdminMSP.admin')"
 
 Capabilities:
     Channel: &ChannelCapabilities
@@ -123,7 +108,7 @@ Application: &ApplicationDefaults
 Orderer: &OrdererDefaults
     OrdererType: etcdraft
     Addresses:
-        - orderer0.lean.com:7050
+        - orderer0.health.com:7050
 
     BatchTimeout: 250ms
     BatchSize:
@@ -134,10 +119,10 @@ Orderer: &OrdererDefaults
     MaxChannels: 0
     EtcdRaft:
         Consenters:
-            - Host: orderer0.lean.com
+            - Host: orderer0.health.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/lean.com/orderers/orderer0.lean.com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/lean.com/orderers/orderer0.lean.com/tls/server.crt
+              ClientTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/server.crt
 
     Organizations:
 
@@ -170,7 +155,7 @@ Channel: &ChannelDefaults
         <<: *ChannelCapabilities
 
 Profiles:
-    LEANOrdererGenesis:
+    HEALTHOrdererGenesis:
         <<: *ChannelDefaults
         Orderer:
             <<: *OrdererDefaults
@@ -181,21 +166,21 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *Citizen
-                    - *Police
-                    - *Forensics
-                    - *Court
-                    - *IdentityProvider
-    LEANChannel:
+                    - *Patient
+                    - *PHC
+                    - *Hospital
+                    - *HealthAdmin
+
+    HEALTHChannel:
         Consortium: SampleConsortium
         <<: *ChannelDefaults
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *Citizen
-                - *Police
-                - *Forensics
-                - *Court
-                - *IdentityProvider
+                - *Patient
+                - *PHC
+                - *Hospital
+                - *HealthAdmin
+
             Capabilities:
                 <<: *ApplicationCapabilities

@@ -1,45 +1,37 @@
 OrdererOrgs:
     - Name: Orderer
-      Domain: lean.com
+      Domain: health.com
       EnableNodeOUs: true
       Template:
           Count: 1
 
 PeerOrgs:
-    - Name: Citizen
-      Domain: citizen.lean.com
+    - Name: Patient
+      Domain: patient.health.com
       EnableNodeOUs: true
       Template:
           Count: 1
       Users:
           Count: 1
 
-    - Name: Police
-      Domain: police.lean.com
+    - Name: PHC
+      Domain: phc.health.com
       EnableNodeOUs: true
       Template:
           Count: 1
       Users:
           Count: 1
 
-    - Name: Forensics
-      Domain: forensics.lean.com
+    - Name: Hospital
+      Domain: hospital.health.com
       EnableNodeOUs: true
       Template:
           Count: 1
       Users:
           Count: 1
 
-    - Name: Court
-      Domain: court.lean.com
-      EnableNodeOUs: true
-      Template:
-          Count: 1
-      Users:
-          Count: 1
-
-    - Name: IdentityProvider
-      Domain: identityprovider.lean.com
+    - Name: HealthAdmin
+      Domain: healthadmin.health.com
       EnableNodeOUs: true
       Template:
           Count: 1

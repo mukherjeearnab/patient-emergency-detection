@@ -1,220 +1,179 @@
 version: "2"
 
 services:
-    orderer0.lean.com:
-        container_name: orderer0.lean.com
+    orderer0.health.com:
+        container_name: orderer0.health.com
         extends:
             file: peer-base.yaml
             service: orderer-base
         volumes:
             - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer0.genesis.block
-            - ../crypto-config/ordererOrganizations/lean.com/orderers/orderer0.lean.com/msp:/var/hyperledger/orderer/msp
-            - ../crypto-config/ordererOrganizations/lean.com/orderers/orderer0.lean.com/tls/:/var/hyperledger/orderer/tls
-            - orderer0.lean.com:/var/hyperledger/production/orderer
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/msp:/var/hyperledger/orderer/msp
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/:/var/hyperledger/orderer/tls
+            - orderer0.health.com:/var/hyperledger/production/orderer
         ports:
             - 7050:7050
 
-    peer0.citizen.lean.com:
-        container_name: peer0.citizen.lean.com
+    peer0.patient.health.com:
+        container_name: peer0.patient.health.com
         extends:
             file: peer-base.yaml
             service: peer-base
         environment:
-            - CORE_PEER_ID=peer0.citizen.lean.com
-            - CORE_PEER_ADDRESS=peer0.citizen.lean.com:7051
+            - CORE_PEER_ID=peer0.patient.health.com
+            - CORE_PEER_ADDRESS=peer0.patient.health.com:7051
             - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.citizen.lean.com:7052
+            - CORE_PEER_CHAINCODEADDRESS=peer0.patient.health.com:7052
             - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.police.lean.com:8051
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=CitizenMSP
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.phc.health.com:8051
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.patient.health.com:7051
+            - CORE_PEER_LOCALMSPID=PatientMSP
             - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.citizen.lean.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.patient.health.com:5984
             - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
             - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
         volumes:
             - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.citizen.lean.com:/var/hyperledger/production
+            - ../crypto-config/peerOrganizations/patient.health.com/peers/peer0.patient.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/patient.health.com/peers/peer0.patient.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.patient.health.com:/var/hyperledger/production
         ports:
             - 7051:7051
 
-    peer0.police.lean.com:
-        container_name: peer0.police.lean.com
+    peer0.phc.health.com:
+        container_name: peer0.phc.health.com
         extends:
             file: peer-base.yaml
             service: peer-base
         environment:
-            - CORE_PEER_ID=peer0.police.lean.com
-            - CORE_PEER_ADDRESS=peer0.police.lean.com:8051
+            - CORE_PEER_ID=peer0.phc.health.com
+            - CORE_PEER_ADDRESS=peer0.phc.health.com:8051
             - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.police.lean.com:8052
+            - CORE_PEER_CHAINCODEADDRESS=peer0.phc.health.com:8052
             - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.police.lean.com:8051
-            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=PoliceMSP
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.phc.health.com:8051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.patient.health.com:7051
+            - CORE_PEER_LOCALMSPID=PHCMSP
             - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.police.lean.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.phc.health.com:5984
             - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
             - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
         volumes:
             - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/police.lean.com/peers/peer0.police.lean.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/police.lean.com/peers/peer0.police.lean.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.police.lean.com:/var/hyperledger/production
+            - ../crypto-config/peerOrganizations/phc.health.com/peers/peer0.phc.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/phc.health.com/peers/peer0.phc.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.phc.health.com:/var/hyperledger/production
         ports:
             - 8051:8051
 
-    peer0.forensics.lean.com:
-        container_name: peer0.forensics.lean.com
+    peer0.hospital.health.com:
+        container_name: peer0.hospital.health.com
         extends:
             file: peer-base.yaml
             service: peer-base
         environment:
-            - CORE_PEER_ID=peer0.forensics.lean.com
-            - CORE_PEER_ADDRESS=peer0.forensics.lean.com:9051
+            - CORE_PEER_ID=peer0.hospital.health.com
+            - CORE_PEER_ADDRESS=peer0.hospital.health.com:9051
             - CORE_PEER_LISTENADDRESS=0.0.0.0:9051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.forensics.lean.com:9052
+            - CORE_PEER_CHAINCODEADDRESS=peer0.hospital.health.com:9052
             - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9052
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.forensics.lean.com:9051
-            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=ForensicsMSP
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.hospital.health.com:9051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.patient.health.com:7051
+            - CORE_PEER_LOCALMSPID=HospitalMSP
             - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.forensics.lean.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.hospital.health.com:5984
             - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
             - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
         volumes:
             - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/forensics.lean.com/peers/peer0.forensics.lean.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/forensics.lean.com/peers/peer0.forensics.lean.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.forensics.lean.com:/var/hyperledger/production
+            - ../crypto-config/peerOrganizations/hospital.health.com/peers/peer0.hospital.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/hospital.health.com/peers/peer0.hospital.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.hospital.health.com:/var/hyperledger/production
         ports:
             - 9051:9051
 
-    peer0.court.lean.com:
-        container_name: peer0.court.lean.com
+    peer0.healthadmin.health.com:
+        container_name: peer0.healthadmin.health.com
         extends:
             file: peer-base.yaml
             service: peer-base
         environment:
-            - CORE_PEER_ID=peer0.court.lean.com
-            - CORE_PEER_ADDRESS=peer0.court.lean.com:10051
+            - CORE_PEER_ID=peer0.healthadmin.health.com
+            - CORE_PEER_ADDRESS=peer0.healthadmin.health.com:10051
             - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.court.lean.com:10052
+            - CORE_PEER_CHAINCODEADDRESS=peer0.healthadmin.health.com:10052
             - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:10052
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.court.lean.com:10051
-            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=CourtMSP
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.healthadmin.health.com:10051
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.patient.health.com:7051
+            - CORE_PEER_LOCALMSPID=HealthAdminMSP
             - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.court.lean.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.healthadmin.health.com:5984
             - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
             - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
         volumes:
             - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/court.lean.com/peers/peer0.court.lean.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/court.lean.com/peers/peer0.court.lean.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.court.lean.com:/var/hyperledger/production
+            - ../crypto-config/peerOrganizations/healthadmin.health.com/peers/peer0.healthadmin.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/healthadmin.health.com/peers/peer0.healthadmin.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer0.healthadmin.health.com:/var/hyperledger/production
         ports:
             - 10051:10051
 
-    peer0.identityprovider.lean.com:
-        container_name: peer0.identityprovider.lean.com
-        extends:
-            file: peer-base.yaml
-            service: peer-base
-        environment:
-            - CORE_PEER_ID=peer0.identityprovider.lean.com
-            - CORE_PEER_ADDRESS=peer0.identityprovider.lean.com:11051
-            - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
-            - CORE_PEER_CHAINCODEADDRESS=peer0.identityprovider.lean.com:11052
-            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
-            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.identityprovider.lean.com:11051
-            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=IdentityProviderMSP
-            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.identityprovider.lean.com:5984
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
-            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
-        volumes:
-            - /var/run/:/host/var/run/
-            - ../crypto-config/peerOrganizations/identityprovider.lean.com/peers/peer0.identityprovider.lean.com/msp:/etc/hyperledger/fabric/msp
-            - ../crypto-config/peerOrganizations/identityprovider.lean.com/peers/peer0.identityprovider.lean.com/tls:/etc/hyperledger/fabric/tls
-            - peer0.identityprovider.lean.com:/var/hyperledger/production
-        ports:
-            - 11051:11051
-
-    caCitizen:
+    ca.patient.health.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-citizen
+            - FABRIC_CA_SERVER_CA_NAME=ca-patient
             - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.citizen.lean.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.patient.health.com-cert.pem
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
             - FABRIC_CA_SERVER_PORT=7054
         ports:
             - "7054:7054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.citizen.lean.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.patient.health.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
         volumes:
-            - ../crypto-config/peerOrganizations/citizen.lean.com/ca/:/etc/hyperledger/fabric-ca-server-config
+            - ../crypto-config/peerOrganizations/patient.health.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
-    caPolice:
+    ca.phc.health.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-police
+            - FABRIC_CA_SERVER_CA_NAME=ca-phc
             - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.police.lean.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.phc.health.com-cert.pem
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
             - FABRIC_CA_SERVER_PORT=8054
         ports:
             - "8054:8054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.police.lean.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.phc.health.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
         volumes:
-            - ../crypto-config/peerOrganizations/police.lean.com/ca/:/etc/hyperledger/fabric-ca-server-config
+            - ../crypto-config/peerOrganizations/phc.health.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
-    caForensics:
+    ca.hospital.health.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-forensics
+            - FABRIC_CA_SERVER_CA_NAME=ca-hospital
             - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.forensics.lean.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.hospital.health.com-cert.pem
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
             - FABRIC_CA_SERVER_PORT=9054
         ports:
             - "9054:9054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.forensics.lean.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.hospital.health.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
         volumes:
-            - ../crypto-config/peerOrganizations/forensics.lean.com/ca/:/etc/hyperledger/fabric-ca-server-config
+            - ../crypto-config/peerOrganizations/hospital.health.com/ca/:/etc/hyperledger/fabric-ca-server-config
 
-    caCourt:
+    ca.healthadmin.health.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
             - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-court
+            - FABRIC_CA_SERVER_CA_NAME=ca-healthadmin
             - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.court.lean.com-cert.pem
+            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.healthadmin.health.com-cert.pem
             - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY
             - FABRIC_CA_SERVER_PORT=10054
         ports:
             - "10054:10054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.court.lean.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY -b admin:adminpw -d'
+        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.healthadmin.health.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY -b admin:adminpw -d'
         volumes:
-            - ../crypto-config/peerOrganizations/court.lean.com/ca/:/etc/hyperledger/fabric-ca-server-config
-
-    caIdentityProvider:
-        image: hyperledger/fabric-ca:$IMAGE_TAG
-        environment:
-            - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-            - FABRIC_CA_SERVER_CA_NAME=ca-identityprovider
-            - FABRIC_CA_SERVER_TLS_ENABLED=true
-            - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.identityprovider.lean.com-cert.pem
-            - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA5_PRIVATE_KEY
-            - FABRIC_CA_SERVER_PORT=11054
-        ports:
-            - "11054:11054"
-        command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.identityprovider.lean.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA5_PRIVATE_KEY -b admin:adminpw -d'
-        volumes:
-            - ../crypto-config/peerOrganizations/identityprovider.lean.com/ca/:/etc/hyperledger/fabric-ca-server-config
+            - ../crypto-config/peerOrganizations/healthadmin.health.com/ca/:/etc/hyperledger/fabric-ca-server-config

@@ -1,133 +1,111 @@
 version: "2"
 
 volumes:
-    orderer0.lean.com:
-    peer0.citizen.lean.com:
-    peer0.police.lean.com:
-    peer0.forensics.lean.com:
-    peer0.court.lean.com:
-    peer0.identityprovider.lean.com:
-    caCitizen:
-    caPolice:
-    caForensics:
-    caCourt:
-    caIdentityProvider:
+    orderer0.health.com:
+    peer0.patient.health.com:
+    peer0.phc.health.com:
+    peer0.hospital.health.com:
+    peer0.healthadmin.health.com:
+    ca.patient.health.com:
+    ca.phc.health.com:
+    ca.hospital.health.com:
+    ca.healthadmin.health.com:
 
 networks:
-    leannet:
+    healthnet:
 
 services:
-    orderer0.lean.com:
+    orderer0.health.com:
         extends:
             file: base/docker-compose-base.yaml
-            service: orderer0.lean.com
-        container_name: orderer0.lean.com
+            service: orderer0.health.com
+        container_name: orderer0.health.com
         networks:
-            - leannet
+            - healthnet
         depends_on:
-            - caCitizen
-            - caPolice
-            - caForensics
-            - caCourt
-            - caIdentityProvider
+            - ca.patient.health.com
+            - ca.phc.health.com
+            - ca.hospital.health.com
+            - ca.healthadmin.health.com
 
-    peer0.citizen.lean.com:
-        container_name: peer0.citizen.lean.com
+    peer0.patient.health.com:
+        container_name: peer0.patient.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.citizen.lean.com
+            service: peer0.patient.health.com
         networks:
-            - leannet
+            - healthnet
         depends_on:
-            - orderer0.lean.com
-            - couchdb.peer0.citizen.lean.com
+            - orderer0.health.com
+            - couchdb.peer0.patient.health.com
 
-    peer0.police.lean.com:
-        container_name: peer0.police.lean.com
+    peer0.phc.health.com:
+        container_name: peer0.phc.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.police.lean.com
+            service: peer0.phc.health.com
         networks:
-            - leannet
+            - healthnet
         depends_on:
-            - orderer0.lean.com
-            - couchdb.peer0.police.lean.com
+            - orderer0.health.com
+            - couchdb.peer0.phc.health.com
 
-    peer0.forensics.lean.com:
-        container_name: peer0.forensics.lean.com
+    peer0.hospital.health.com:
+        container_name: peer0.hospital.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.forensics.lean.com
+            service: peer0.hospital.health.com
         networks:
-            - leannet
+            - healthnet
         depends_on:
-            - orderer0.lean.com
-            - couchdb.peer0.forensics.lean.com
+            - orderer0.health.com
+            - couchdb.peer0.hospital.health.com
 
-    peer0.court.lean.com:
-        container_name: peer0.court.lean.com
+    peer0.healthadmin.health.com:
+        container_name: peer0.healthadmin.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.court.lean.com
+            service: peer0.healthadmin.health.com
         networks:
-            - leannet
+            - healthnet
         depends_on:
-            - orderer0.lean.com
-            - couchdb.peer0.court.lean.com
+            - orderer0.health.com
+            - couchdb.peer0.healthadmin.health.com
 
-    peer0.identityprovider.lean.com:
-        container_name: peer0.identityprovider.lean.com
+    ca.patient.health.com:
+        container_name: ca.patient.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: peer0.identityprovider.lean.com
+            service: ca.patient.health.com
         networks:
-            - leannet
-        depends_on:
-            - orderer0.lean.com
-            - couchdb.peer0.identityprovider.lean.com
+            - healthnet
 
-    caCitizen:
-        container_name: caCitizen
+    ca.phc.health.com:
+        container_name: ca.phc.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: caCitizen
+            service: ca.phc.health.com
         networks:
-            - leannet
+            - healthnet
 
-    caPolice:
-        container_name: caPolice
+    ca.hospital.health.com:
+        container_name: ca.hospital.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: caPolice
+            service: ca.hospital.health.com
         networks:
-            - leannet
+            - healthnet
 
-    caForensics:
-        container_name: caForensics
+    ca.healthadmin.health.com:
+        container_name: ca.healthadmin.health.com
         extends:
             file: base/docker-compose-base.yaml
-            service: caForensics
+            service: ca.healthadmin.health.com
         networks:
-            - leannet
+            - healthnet
 
-    caCourt:
-        container_name: caCourt
-        extends:
-            file: base/docker-compose-base.yaml
-            service: caCourt
-        networks:
-            - leannet
-
-    caIdentityProvider:
-        container_name: caIdentityProvider
-        extends:
-            file: base/docker-compose-base.yaml
-            service: caIdentityProvider
-        networks:
-            - leannet
-
-    couchdb.peer0.citizen.lean.com:
-        container_name: couchdb.peer0.citizen.lean.com
+    couchdb.peer0.patient.health.com:
+        container_name: couchdb.peer0.patient.health.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -135,10 +113,10 @@ services:
         ports:
             - "5984:5984"
         networks:
-            - leannet
+            - healthnet
 
-    couchdb.peer0.police.lean.com:
-        container_name: couchdb.peer0.police.lean.com
+    couchdb.peer0.phc.health.com:
+        container_name: couchdb.peer0.phc.health.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -146,10 +124,10 @@ services:
         ports:
             - "6984:5984"
         networks:
-            - leannet
+            - healthnet
 
-    couchdb.peer0.forensics.lean.com:
-        container_name: couchdb.peer0.forensics.lean.com
+    couchdb.peer0.hospital.health.com:
+        container_name: couchdb.peer0.hospital.health.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -157,10 +135,10 @@ services:
         ports:
             - "7984:5984"
         networks:
-            - leannet
+            - healthnet
 
-    couchdb.peer0.court.lean.com:
-        container_name: couchdb.peer0.court.lean.com
+    couchdb.peer0.healthadmin.health.com:
+        container_name: couchdb.peer0.healthadmin.health.com
         image: hyperledger/fabric-couchdb
         environment:
             - COUCHDB_USER=admin
@@ -168,18 +146,7 @@ services:
         ports:
             - "8984:5984"
         networks:
-            - leannet
-
-    couchdb.peer0.identityprovider.lean.com:
-        container_name: couchdb.peer0.identityprovider.lean.com
-        image: hyperledger/fabric-couchdb
-        environment:
-            - COUCHDB_USER=admin
-            - COUCHDB_PASSWORD=adminpw
-        ports:
-            - "9984:5984"
-        networks:
-            - leannet
+            - healthnet
 
     cli:
         container_name: cli
@@ -192,13 +159,13 @@ services:
             #- FABRIC_LOGGING_SPEC=DEBUG
             - FABRIC_LOGGING_SPEC=INFO
             - CORE_PEER_ID=cli
-            - CORE_PEER_ADDRESS=peer0.citizen.lean.com:7051
-            - CORE_PEER_LOCALMSPID=CitizenMSP
+            - CORE_PEER_ADDRESS=peer0.patient.health.com:7051
+            - CORE_PEER_LOCALMSPID=PatientMSP
             - CORE_PEER_TLS_ENABLED=true
-            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/server.crt
-            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/server.key
-            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/peers/peer0.citizen.lean.com/tls/ca.crt
-            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/citizen.lean.com/users/Admin@citizen.lean.com/msp
+            - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/patient.health.com/peers/peer0.patient.health.com/tls/server.crt
+            - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/patient.health.com/peers/peer0.patient.health.com/tls/server.key
+            - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/patient.health.com/peers/peer0.patient.health.com/tls/ca.crt
+            - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/patient.health.com/users/Admin@patient.health.com/msp
         working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
         command: /bin/bash
         volumes:
@@ -208,16 +175,14 @@ services:
             - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
             - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
         depends_on:
-            - orderer0.lean.com
-            - peer0.citizen.lean.com
-            - peer0.police.lean.com
-            - peer0.forensics.lean.com
-            - peer0.court.lean.com
-            - peer0.identityprovider.lean.com
-            - caCitizen
-            - caPolice
-            - caForensics
-            - caCourt
-            - caIdentityProvider
+            - orderer0.health.com
+            - peer0.patient.health.com
+            - peer0.phc.health.com
+            - peer0.hospital.health.com
+            - peer0.healthadmin.health.com
+            - ca.patient.health.com
+            - ca.phc.health.com
+            - ca.hospital.health.com
+            - ca.healthadmin.health.com
         networks:
-            - leannet
+            - healthnet
