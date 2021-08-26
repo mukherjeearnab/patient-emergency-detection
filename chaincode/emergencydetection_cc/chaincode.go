@@ -127,7 +127,7 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	}
 
 	// Returned on successful execution of the function
-	return shim.Success(fmt.Sprint(detectionAsBytes))
+	return shim.Success(detectionAsBytes)
 }
 
 // ---------------------------------------------
