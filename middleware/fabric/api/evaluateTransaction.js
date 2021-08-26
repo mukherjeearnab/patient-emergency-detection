@@ -1,0 +1,33 @@
+const { FileSystemWallet, Gateway } = require("fabric-network");
+const path = require("path");
+
+const EvaluateTransaction = async (contract, user, params) => {
+    // Load user Wallet
+    const ccp = require(`../ccp/connection-${user.group}.json`);
+    const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.group}`);
+    const wallet = new FileSystemWallet(walletPath);
+    console.log(`Wallet path: ${walletPath}`);
+
+    // Create a new gateway for connecting to our peer node.
+    const gateway = new Gateway();
+    await gateway.connect(ccp, {
+        wallet,
+        identity: user.username,
+        discovery: { enabled: true, asLocalhost: true },
+    });
+
+    // Get the network (channel) our contract is deployed to.
+    const network = await gateway.getNetwork(contract.channel);
+
+    // Get the contract from the network.
+    const contract = network.getContract(contract.name);
+
+    // Evaluate the specified transaction.
+    let payload = await contract.evaluateTransaction(contract.function, ...params);
+
+    // Return payload (if any)
+    if (payload) return JSON.parse(payload.toString());
+    else return null;
+};
+
+module.exports = EvaluateTransaction;
