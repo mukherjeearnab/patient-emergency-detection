@@ -120,8 +120,14 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	// Decrypt Cipher and obtain result
 	detectionStatus := TPE.Decrypt(Cipher, Token.Token)
 
+	// Convert to JSON bytes
+	detectionAsBytes, err := json.Marshal(detectionStatus)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	// Returned on successful execution of the function
-	return shim.Success(fmt.Sprint(detectionStatus))
+	return shim.Success(fmt.Sprint(detectionAsBytes))
 }
 
 // ---------------------------------------------
