@@ -16,7 +16,7 @@ app.use(function (req, res, next) {
 });
 
 // Load API Routes
-app.use(require("./routes"));
+require("./routes")(app);
 
 // Start Listening
 app.listen(3000, () => console.log("Listening on port 3000."));
