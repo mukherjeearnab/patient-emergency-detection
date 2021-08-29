@@ -4,8 +4,8 @@ const path = require("path");
 const SubmitTransaction = async (contract, user, params) => {
     try {
         // Load user Wallet
-        const ccp = require(`../ccp/connection-${user.group}.json`);
-        const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.group}`);
+        const ccp = require(`../ccp/connection-${user.organization}.json`);
+        const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.organization}`);
         const wallet = new FileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
