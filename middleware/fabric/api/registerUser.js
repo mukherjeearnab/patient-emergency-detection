@@ -28,7 +28,7 @@ const RegisterUser = async (user) => {
         );
         const enrollment = await ca.enroll({ enrollmentID: user.username, enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity(
-            cpp.organizations.mspid,
+            ccp.organizations.mspid,
             enrollment.certificate,
             enrollment.key.toBytes()
         );
