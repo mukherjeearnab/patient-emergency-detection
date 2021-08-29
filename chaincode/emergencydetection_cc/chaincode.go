@@ -86,7 +86,7 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	if err != nil {
 		return shim.Error("Failed to get Token Details!")
 	} else if tokenAsBytes == nil {
-		return shim.Error("Error: Token Does NOT Exist!")
+		return shim.Error("Error: Token Does NOT Exist!" + assetKey)
 	}
 
 	// Retrieve Token struct var
