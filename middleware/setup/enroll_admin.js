@@ -9,7 +9,7 @@ const FabricAPI = require("../fabric/api");
 
 const main = async () => {
     try {
-        adminInfo.forEach((organization) => {
+        adminInfo.forEach(async (organization) => {
             console.log("Enrolling", organization);
             await FabricAPI.Account.EnrollAdmin(organization);
         });
