@@ -30,7 +30,7 @@ const SubmitTransaction = async (contract, user, params) => {
         if (payload) return JSON.parse(payload.toString());
         else return null;
     } catch (error) {
-        console.error("Failed to Submit Transaction.", error);
+        console.error("Failed to Submit Transaction.", error.message);
     }
 };
 

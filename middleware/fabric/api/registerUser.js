@@ -28,14 +28,14 @@ const RegisterUser = async (user) => {
         );
         const enrollment = await ca.enroll({ enrollmentID: user.username, enrollmentSecret: secret });
         const userIdentity = X509WalletMixin.createIdentity(
-            ccp.organizations.mspid,
+            ccp.organizations[user.orgName].mspid,
             enrollment.certificate,
             enrollment.key.toBytes()
         );
         await wallet.import(user.username, userIdentity);
         console.log(`Added user <${user.username}>`);
     } catch (error) {
-        console.error(`Failed to enroll user <${user.username}>: ${error}`);
+        console.error(`Failed to enroll user <${user.username}>: ${error.message}`);
     }
 };
 

@@ -14,6 +14,6 @@ module.exports = async (user, params) => {
 
         return reply;
     } catch (error) {
-        console.error("Failed to readPatientProfile.", error);
+        console.error("Failed to readPatientProfile.", error.message);
     }
 };

@@ -30,7 +30,7 @@ const EvaluateTransaction = async (contract, user, params) => {
         if (payload) return JSON.parse(payload.toString());
         else return null;
     } catch (error) {
-        console.error("Failed to Evaluate Transaction.", error);
+        console.error("Failed to Evaluate Transaction.", error.message);
     }
 };
 
