@@ -6,7 +6,7 @@ const router = new express.Router();
 
 router.get("/api/detection/check/:id", JWTmiddleware, async (req, res) => {
     try {
-        let data = DetectionContract.CheckReading(
+        let data = await DetectionContract.CheckReading(
             { username: req.user.username, organization: req.user.organization },
             [req.params.id, req.body.data.Cipher]
         );
