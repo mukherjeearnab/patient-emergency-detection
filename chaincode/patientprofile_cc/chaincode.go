@@ -39,6 +39,8 @@ func (cc *Chaincode) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 		return cc.createPatientProfile(stub, params)
 	} else if fcn == "updatePatientProfile" {
 		return cc.updatePatientProfile(stub, params)
+	} else if fcn == "activatePatientProfile" {
+		return cc.activatePatientProfile(stub, params)
 	} else if fcn == "readPatientProfile" {
 		return cc.readPatientProfile(stub, params)
 	} else {

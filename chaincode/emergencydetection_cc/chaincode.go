@@ -54,13 +54,13 @@ func (cc *Chaincode) Invoke(stub shim.ChaincodeStubInterface) sc.Response {
 // Function to Create a New Token Profile.
 func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []string) sc.Response {
 	// Check Access
-	creatorOrg, creatorCertIssuer, creatorID, _ := getTxCreatorInfo(stub)
+	creatorOrg, creatorCertIssuer, _, _ := getTxCreatorInfo(stub)
 	if !authenticatePatient(creatorOrg, creatorCertIssuer) {
 		return shim.Error("{\"Error\":\"Access Denied!\",\"Payload\":{\"MSP\":\"" + creatorOrg + "\",\"CA\":\"" + creatorCertIssuer + "\"}}")
 	}
 
 	// Set Number of Params
-	paramCount := 1
+	paramCount := 2
 
 	// Check if sufficient Params passed
 	if len(params) != paramCount {
@@ -75,8 +75,8 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	}
 
 	// Copy the Values from params[]
-	ID := creatorID
-	Cipher := params[0]
+	ID := params[0]
+	Cipher := params[1]
 
 	// Generate Asset Key
 	assetKey := tokenKey + ID
