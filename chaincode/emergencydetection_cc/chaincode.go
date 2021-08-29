@@ -88,7 +88,7 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 
 	// Retrieve Token struct var
 	Token := token{}
-	err = json.Unmarshal(response.GetPayload(), &Token) //unmarshal it aka JSON.parse()
+	err := json.Unmarshal(response.GetPayload(), &Token) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
