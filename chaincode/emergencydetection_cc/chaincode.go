@@ -81,17 +81,15 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	// Generate Asset Key
 	assetKey := tokenKey + ID
 
-	// Check if Token exists with Key => assetKey
-	tokenAsBytes, err := stub.GetState(assetKey)
-	if err != nil {
-		return shim.Error("Failed to get Token Details!")
-	} else if tokenAsBytes == nil {
-		return shim.Error("Error: Token Does NOT Exist!" + assetKey)
+	args := util.ToChaincodeArgs("addSDID", SRID, params[0])
+	response := stub.InvokeChaincode("segregationrequest_cc", args, "mainchannel")
+	if response.Status != shim.OK {
+		return shim.Error(response.Message)
 	}
 
 	// Retrieve Token struct var
 	Token := token{}
-	err = json.Unmarshal(tokenAsBytes, &Token) //unmarshal it aka JSON.parse()
+	err = json.Unmarshal(response.GetPayload(), &Token) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
