@@ -78,11 +78,9 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 	ID := params[0]
 	Cipher := params[1]
 
-	// Generate Asset Key
-	assetKey := tokenKey + ID
-
-	args := util.ToChaincodeArgs("addSDID", SRID, params[0])
-	response := stub.InvokeChaincode("segregationrequest_cc", args, "mainchannel")
+	// Get Token from Chaincode
+	args := util.ToChaincodeArgs("readToken", ID)
+	response := stub.InvokeChaincode("token_cc", args, "mainchannel")
 	if response.Status != shim.OK {
 		return shim.Error(response.Message)
 	}
