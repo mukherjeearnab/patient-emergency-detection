@@ -7,15 +7,7 @@ const router = new express.Router();
 
 router.get("/api/tpe/config/get", JWTmiddleware, async (req, res) => {
     try {
-        let data = TPEContract.GetConfig(
-            {
-                name: "tpeconfig_cc",
-                channel: "mainchannel",
-                function: "readTPEConfig",
-            },
-            { username: req.user.username, organization: req.user.organization },
-            []
-        );
+        let data = TPEContract.GetConfig({ username: req.user.username, organization: req.user.organization }, []);
         res.status(200).send(data);
     } catch (error) {
         res.status(404).send({ message: "Asset NOT found!" });
@@ -24,15 +16,10 @@ router.get("/api/tpe/config/get", JWTmiddleware, async (req, res) => {
 
 router.post("/api/tpe/config/set", JWTmiddleware, async (req, res) => {
     try {
-        let reply = TPEContract.GetConfig(
-            {
-                name: "tpeconfig_cc",
-                channel: "mainchannel",
-                function: "setTPEConfig",
-            },
-            { username: req.user.username, organization: req.user.organization },
-            [req.body.data.N, req.body.data.Theta]
-        );
+        let reply = TPEContract.SetConfig({ username: req.user.username, organization: req.user.organization }, [
+            req.body.data.N,
+            req.body.data.Theta,
+        ]);
 
         res.status(200).send({
             reply,

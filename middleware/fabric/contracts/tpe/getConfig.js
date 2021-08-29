@@ -1,0 +1,21 @@
+const FabricAPI = require("../../api");
+
+const SetConfig = async (user, params) => {
+    try {
+        let reply = await FabricAPI.Contract.EvaluateTransaction(
+            {
+                name: "tpeconfig_cc",
+                channel: "mainchannel",
+                function: "readTPEConfig",
+            },
+            user,
+            params
+        );
+
+        return reply;
+    } catch (error) {
+        console.error("Failed to Evaluate readTPEConfig.", error);
+    }
+};
+
+module.exports = SetConfig;
