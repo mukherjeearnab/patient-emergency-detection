@@ -3,8 +3,8 @@ const path = require("path");
 
 const EvaluateTransaction = async (contract, user, params) => {
     // Load user Wallet
-    const ccp = require(`../ccp/connection-${user.group}.json`);
-    const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.group}`);
+    const ccp = require(`../ccp/connection-${user.organization}.json`);
+    const walletPath = path.join(process.cwd(), "wallets", `wallet_${user.organization}`);
     const wallet = new FileSystemWallet(walletPath);
     console.log(`Wallet path: ${walletPath}`);
 
@@ -20,10 +20,10 @@ const EvaluateTransaction = async (contract, user, params) => {
     const network = await gateway.getNetwork(contract.channel);
 
     // Get the contract from the network.
-    const contract = network.getContract(contract.name);
+    const Contract = network.getContract(contract.name);
 
     // Evaluate the specified transaction.
-    let payload = await contract.evaluateTransaction(contract.function, ...params);
+    let payload = await Contract.evaluateTransaction(contract.function, ...params);
 
     // Return payload (if any)
     if (payload) return JSON.parse(payload.toString());

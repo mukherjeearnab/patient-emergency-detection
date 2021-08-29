@@ -20,10 +20,10 @@ const SubmitTransaction = async (contract, user, params) => {
     const network = await gateway.getNetwork(contract.channel);
 
     // Get the contract from the network.
-    const contract = network.getContract(contract.name);
+    const Contract = network.getContract(contract.name);
 
     // Submit the specified transaction.
-    let payload = await contract.submitTransaction(contract.function, ...params);
+    let payload = await Contract.submitTransaction(contract.function, ...params);
 
     // Return payload (if any)
     if (payload) return JSON.parse(payload.toString());
