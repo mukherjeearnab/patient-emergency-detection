@@ -93,17 +93,16 @@ func (cc *Chaincode) checkReading(stub shim.ChaincodeStubInterface, params []str
 		return shim.Error(err.Error())
 	}
 
-	// Check if TPE Configuration exists
-	tpeConfigAsBytes, err := stub.GetState(tpeConfigKey)
-	if err != nil {
-		return shim.Error("Failed to get TPE Configuration Details!")
-	} else if tpeConfigAsBytes == nil {
-		return shim.Error("Error: TPE Configuration Does NOT Exist!")
+	// Get TPE Configuration
+	tpeArgs := util.ToChaincodeArgs("readTPEConfig")
+	tpeResponse := stub.InvokeChaincode("tpeconfig_cc", tpeArgs, "mainchannel")
+	if tpeResponse.Status != shim.OK {
+		return shim.Error(tpeResponse.Message)
 	}
 
 	// Retrieve TPE Configuration
 	TPEConfig := tpeConfig{}
-	err = json.Unmarshal(tpeConfigAsBytes, &TPEConfig) //unmarshal it aka JSON.parse()
+	err = json.Unmarshal(tpeResponse.GetPayload(), &TPEConfig) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
