@@ -54,8 +54,12 @@ router.post("/api/auth/signup", async (req, res) => {
         };
 
         // Create Wallet Identity for the Username
-        const regUser = require(`../../fabric/reg_user/reg-${newUser.organization}`);
-        await regUser(newUser);
+        const FabricAPI = require("../../fabric/api");
+        await FabricAPI.Account.RegisterUser({
+            orgName: newUser.organization,
+            username: newUser.username,
+            affiliation: "org.client",
+        });
 
         // Add username & passhash to the MongoDB Auth Database
         User.create(newUser, function (err, doc) {
