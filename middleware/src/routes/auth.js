@@ -58,7 +58,7 @@ router.post("/api/auth/signup", async (req, res) => {
         await FabricAPI.Account.RegisterUser({
             orgName: newUser.organization,
             username: newUser.username,
-            affiliation: "org.client",
+            affiliation: "org1.department1",
         });
 
         // Add username & passhash to the MongoDB Auth Database
