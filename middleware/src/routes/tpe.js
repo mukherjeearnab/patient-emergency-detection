@@ -11,9 +11,9 @@ router.get("/api/tpe/config/get", JWTmiddleware, async (req, res) => {
             {
                 name: "tpeconfig_cc",
                 channel: "mainchannel",
-                function: "getConfig",
+                function: "readTPEConfig",
             },
-            { username: "", organization: "" },
+            { username: req.user.username, organization: req.user.organization },
             []
         );
         res.status(200).send(data);
@@ -24,13 +24,23 @@ router.get("/api/tpe/config/get", JWTmiddleware, async (req, res) => {
 
 router.post("/api/tpe/config/set", JWTmiddleware, async (req, res) => {
     try {
-        let Data = req.body.data;
+        let reply = TPEContract.GetConfig(
+            {
+                name: "tpeconfig_cc",
+                channel: "mainchannel",
+                function: "setTPEConfig",
+            },
+            { username: req.user.username, organization: req.user.organization },
+            [req.body.data.N, req.body.data.Theta]
+        );
+
         res.status(200).send({
-            data: Data,
+            reply,
+            message: "TPE Config has been successfully set.",
         });
     } catch (error) {
         console.log(error);
-        res.status(500).send({ message: "Error! Asset NOT Added!" });
+        res.status(500).send({ message: "Error! TPE Config NOT set!" });
     }
 });
 
