@@ -1,5 +1,4 @@
 const express = require("express");
-const md5 = require("md5");
 const JWTmiddleware = require("../helpers/jwtVerifyMiddleware");
 const TPEContract = require("../../fabric/contracts/tpe");
 
