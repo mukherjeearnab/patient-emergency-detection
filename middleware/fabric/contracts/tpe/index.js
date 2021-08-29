@@ -1,9 +1,7 @@
 const GetConfig = require("./getConfig");
 const SetConfig = require("./setConfig");
 
-const Contract = {
+module.exports = {
     GetConfig,
     SetConfig,
 };
-
-module.exports = Contract;

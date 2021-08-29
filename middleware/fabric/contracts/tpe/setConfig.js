@@ -1,6 +1,6 @@
 const FabricAPI = require("../../api");
 
-const SetConfig = async (user, params) => {
+module.exports = async (user, params) => {
     try {
         let reply = await FabricAPI.Contract.SubmitTransaction(
             {
@@ -17,5 +17,3 @@ const SetConfig = async (user, params) => {
         console.error("Failed to Submit setTPEConfig.", error);
     }
 };
-
-module.exports = SetConfig;
