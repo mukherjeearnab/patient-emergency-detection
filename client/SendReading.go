@@ -7,6 +7,7 @@ import (
 	tpe "github.com/mukherjeearnab/gotpe"
 	"io/ioutil"
 	"net/http"
+	"net/url"
 )
 
 func SendReading(positive bool, server string) {
@@ -43,7 +44,7 @@ func SendReading(positive bool, server string) {
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Negative Case Cipher.")
+		fmt.Println("Generated Positive Case Cipher.\n" + cipher)
 
 		// Send Cipher to server
 		sendReadingHTTP(ClientConfig.NetID, cipher, server)
@@ -54,7 +55,7 @@ func SendReading(positive bool, server string) {
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Positive Case Cipher.")
+		fmt.Println("Generated Negative Case Cipher.\n" + cipher)
 
 		// Send Cipher to server
 		sendReadingHTTP(ClientConfig.NetID, cipher, server)
@@ -67,7 +68,7 @@ func sendReadingHTTP(NetID string, cipher string, server string) {
 	fmt.Println(jwt)
 
 	client := &http.Client{}
-	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID+"/"+cipher, nil)
+	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID+"/?cipher="+url.QueryEscape(cipher), nil)
 	req.Header.Set("x-access-token", jwt)
 	res, err := client.Do(req)
 
