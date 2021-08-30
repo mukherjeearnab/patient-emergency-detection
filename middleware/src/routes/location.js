@@ -10,6 +10,7 @@ router.get("/api/location/set/:id", JWTmiddleware, async (req, res) => {
         //     { username: req.user.username, organization: req.user.organization },
         //     [req.params.id, req.query.cipher]
         // );
+        console.log("Got Location, Init Ememgency.", req.params.id, req.body.location);
         res.status(200).send({
             location: req.body.location,
             message: "Got Location, Init Ememgency.",
