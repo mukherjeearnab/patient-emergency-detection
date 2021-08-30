@@ -106,4 +106,37 @@ router.get("/api/auth/verify", (req, res) => {
     }
 });
 
+// Login JWT Route
+router.post("/api/auth/loginpt", (req, res) => {
+    const username = req.body.username;
+    const passhash = sha256(req.body.password);
+    const organization = req.body.organization;
+    try {
+        User.findOne({ username }, (err, doc) => {
+            if (err || doc == null) return res.sendStatus(404);
+            if (doc.passhash === passhash) {
+                let userdata = {
+                    username,
+                    passhash,
+                    organization,
+                };
+                let token = jwt.sign(userdata, JWTConfig.secretKey, {
+                    algorithm: JWTConfig.algorithm,
+                    expiresIn: process.env.JWT_EXPIRATION,
+                });
+                res.status(200).send(token);
+            } else {
+                res.status(401).send({
+                    message: "Login Failed!",
+                });
+            }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            message: "Server Error!",
+        });
+    }
+});
+
 module.exports = router;
