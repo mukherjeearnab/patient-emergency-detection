@@ -64,15 +64,16 @@ func SendReading(positive bool, server string) {
 func sendReadingHTTP(NetID string, cipher string, server string) {
 	// Get JWT Authentication Token
 	jwt := loginJWT("p1", "1234", server)
+	fmt.Println(jwt)
 
 	//Encode the data
 	postBody, _ := json.Marshal(map[string]string{
-		"cipher": cipher,
+		"Cipher": cipher,
 	})
 	reqBody := bytes.NewBuffer(postBody)
 
 	client := &http.Client{}
-	req, _ := http.NewRequest("POST", server+"/api/detection/check/"+NetID, reqBody)
+	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID, reqBody)
 	req.Header.Set("x-access-token", jwt)
 	res, err := client.Do(req)
 
@@ -81,7 +82,14 @@ func sendReadingHTTP(NetID string, cipher string, server string) {
 		fmt.Printf("An Error Occured %v\n", err)
 	}
 	defer res.Body.Close()
-	fmt.Println("Sent HTTP POST request containing Cipher.")
+
+	//Read the response body
+	body, err := ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println("Sent HTTP POST request containing Cipher. RES=" + string(body))
 }
 
 func loginJWT(username string, password string, server string) string {
