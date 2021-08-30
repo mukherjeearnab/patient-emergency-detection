@@ -5,6 +5,7 @@ import (
 	"fmt"
 	tpe "github.com/mukherjeearnab/gotpe"
 	"io/ioutil"
+	"os"
 	"time"
 )
 
@@ -20,6 +21,10 @@ type clientConfig struct {
 }
 
 func GenerateKey(config string) string {
+	// Delete Old Keys and Tokens
+	os.Remove("ClientKey.json")
+	os.Remove("ClientToken.txt")
+
 	// Load Config JSON
 	configJSON, _ := ioutil.ReadFile(config)
 	ClientConfig := clientConfig{}

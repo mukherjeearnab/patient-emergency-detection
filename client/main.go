@@ -1,11 +1,11 @@
 package main
 
 import (
-// "fmt"
+	"fmt"
 )
 
 func main() {
-	// NetID := GenerateKey("ClientConfig.json")
-	// fmt.Printf("Network ID: %s\n", NetID)
-	SendReading(true, "http://192.168.1.100:3000")
+	NetID := GenerateKey("ClientConfig.json")
+	fmt.Printf("Network ID: %s\n", NetID)
+	SendReading(false, "http://192.168.1.100:3000")
 }
