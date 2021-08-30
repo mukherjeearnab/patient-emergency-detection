@@ -4,7 +4,7 @@ const JWTmiddleware = require("../helpers/jwtVerifyMiddleware");
 
 const router = new express.Router();
 
-router.get("/api/location/set/:id", JWTmiddleware, async (req, res) => {
+router.post("/api/location/set/:id", JWTmiddleware, async (req, res) => {
     try {
         // let data = await DetectionContract.CheckReading(
         //     { username: req.user.username, organization: req.user.organization },
