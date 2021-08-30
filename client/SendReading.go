@@ -20,8 +20,8 @@ func SendReading(positive bool, server string) bool {
 		fmt.Println("Error parsing Client Config")
 	}
 
-	fmt.Println("Loading Client Config.")
-	fmt.Println(ClientConfig)
+	fmt.Println("\nLoading Client Config.")
+	// fmt.Println(ClientConfig)
 
 	// Init TPE instance
 	var TPE tpe.TPE
@@ -45,7 +45,7 @@ func SendReading(positive bool, server string) bool {
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Positive Case Cipher.\n" + cipher)
+		fmt.Println("Generated Positive Case Cipher.")
 
 		// Send Cipher to server
 		flag := sendReadingHTTP(ClientConfig.NetID, cipher, server)
@@ -57,7 +57,7 @@ func SendReading(positive bool, server string) bool {
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Negative Case Cipher.\n" + cipher)
+		fmt.Println("Generated Negative Case Cipher.")
 
 		// Send Cipher to server
 		flag := sendReadingHTTP(ClientConfig.NetID, cipher, server)
@@ -68,7 +68,7 @@ func SendReading(positive bool, server string) bool {
 func sendReadingHTTP(NetID string, cipher string, server string) bool {
 	// Get JWT Authentication Token
 	jwt := loginJWT("p1", "1234", server)
-	fmt.Println(jwt)
+	// fmt.Println(jwt)
 
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID+"/?cipher="+url.QueryEscape(cipher), nil)

@@ -18,7 +18,7 @@ func SendLocation(location string, server string) {
 	}
 
 	fmt.Println("Loading Client Config.")
-	fmt.Println(ClientConfig)
+	// fmt.Println(ClientConfig)
 
 	fmt.Println("Sending Location.")
 	sendLocationHTTP(ClientConfig.NetID, location, server)
@@ -27,25 +27,28 @@ func SendLocation(location string, server string) {
 func sendLocationHTTP(NetID string, location string, server string) {
 	// Get JWT Authentication Token
 	jwt := loginJWT("p1", "1234", server)
-	fmt.Println(jwt)
+	// fmt.Println(jwt)
 
 	//Encode the data
 	postBody, _ := json.Marshal(map[string]string{
 		"location": location,
 	})
 
-	responseBody := bytes.NewBuffer(postBody)
+	reqBody := bytes.NewBuffer(postBody)
 	//Leverage Go's HTTP Post function to make request
-	resp, err := http.Post(server+"/api/location/set", "application/json", responseBody)
+	client := &http.Client{}
+	req, _ := http.NewRequest("POST", server+"/api/location/set/"+NetID, reqBody)
+	req.Header.Set("x-access-token", jwt)
+	res, err := client.Do(req)
 
 	//Handle Error
 	if err != nil {
 		fmt.Printf("An Error Occured %v\n", err)
 	}
-	defer resp.Body.Close()
+	defer res.Body.Close()
 
 	//Read the response body
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		fmt.Println(err)
 	}
