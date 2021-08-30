@@ -66,14 +66,8 @@ func sendReadingHTTP(NetID string, cipher string, server string) {
 	jwt := loginJWT("p1", "1234", server)
 	fmt.Println(jwt)
 
-	//Encode the data
-	postBody, _ := json.Marshal(map[string]string{
-		"Cipher": cipher,
-	})
-	reqBody := bytes.NewBuffer(postBody)
-
 	client := &http.Client{}
-	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID, reqBody)
+	req, _ := http.NewRequest("GET", server+"/api/detection/check/"+NetID+"/"+cipher, nil)
 	req.Header.Set("x-access-token", jwt)
 	res, err := client.Do(req)
 

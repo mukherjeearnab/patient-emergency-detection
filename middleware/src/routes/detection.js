@@ -4,11 +4,11 @@ const DetectionContract = require("../../fabric/contracts/detection");
 
 const router = new express.Router();
 
-router.get("/api/detection/check/:id", JWTmiddleware, async (req, res) => {
+router.get("/api/detection/check/:id/:cipher", JWTmiddleware, async (req, res) => {
     try {
         let data = await DetectionContract.CheckReading(
             { username: req.user.username, organization: req.user.organization },
-            [req.params.id, req.body.Cipher]
+            [req.params.id, req.params.cipher]
         );
         res.status(200).send({
             detection: data,
