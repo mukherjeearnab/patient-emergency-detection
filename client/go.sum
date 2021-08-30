@@ -15,8 +15,8 @@ github.com/go-latex/latex v0.0.0-20210118124228-b3d85cf34e07/go.mod h1:CO1AlKB2C
 github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0/go.mod h1:E/TSTwGwJL78qG/PmXZO1EjYhfJinVAhrmmHX6Z8B9k=
 github.com/jung-kurt/gofpdf v1.0.0/go.mod h1:7Id9E/uU8ce6rXgefFLlgrJj/GYY22cpxn+r32jIOes=
 github.com/jung-kurt/gofpdf v1.0.3-0.20190309125859-24315acbbda5/go.mod h1:7Id9E/uU8ce6rXgefFLlgrJj/GYY22cpxn+r32jIOes=
-github.com/mukherjeearnab/gotpe v0.0.0-20210715043928-1fb0159e34d6 h1:bEaHHhj/WDrGyqkM3So0bSek9HYfp28x/ag9tbKLfXs=
-github.com/mukherjeearnab/gotpe v0.0.0-20210715043928-1fb0159e34d6/go.mod h1:dtUBSzryMnlGd38aY6q1IeJ2J8bAiBECr+G8CmKQd24=
+github.com/mukherjeearnab/gotpe v0.0.0-20210830090425-6226b3a07045 h1:Br/CD/ZrfFHHcMcDQliHundHK2+IvUy3e1aDLRch38Q=
+github.com/mukherjeearnab/gotpe v0.0.0-20210830090425-6226b3a07045/go.mod h1:dtUBSzryMnlGd38aY6q1IeJ2J8bAiBECr+G8CmKQd24=
 github.com/phpdave11/gofpdf v1.4.2/go.mod h1:zpO6xFn9yxo3YLyMvW8HcKWVdbNqgIfOOp2dXMnm1mY=
 github.com/phpdave11/gofpdi v1.0.12/go.mod h1:vBmVV0Do6hSBHC8uKUQ71JGW+ZGQq74llk/7bXwjDoI=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
