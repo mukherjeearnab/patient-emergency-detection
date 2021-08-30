@@ -19,6 +19,11 @@ func SendReading(positive bool, server string) {
 		fmt.Println("Error parsing Client Config")
 	}
 
+	// Load Token
+	tokenBytes, _ := ioutil.ReadFile("ClientToken.txt")
+	token := string(tokenBytes)
+	fmt.Println("TOKEN" + token)
+
 	fmt.Println("Loading Client Config.")
 	fmt.Println(ClientConfig)
 
@@ -41,10 +46,15 @@ func SendReading(positive bool, server string) {
 		// Positive Case
 		// Create Vector X
 		x := []float64{1, 1, 9, 1, 1}
+		fmt.Println(x)
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Positive Case Cipher.\n" + cipher)
+		fmt.Println("Generated Positive Case Cipher.\n" + url.QueryEscape(cipher))
+
+		// Decrypt Cipher and obtain result
+		dec := TPE.Decrypt(cipher, token)
+		fmt.Println("\n\nDecrypted Result: " + fmt.Sprint(dec))
 
 		// Send Cipher to server
 		sendReadingHTTP(ClientConfig.NetID, cipher, server)
@@ -52,10 +62,15 @@ func SendReading(positive bool, server string) {
 		// Negative Case
 		// Create Vector X
 		x := []float64{1, 1, 11, 1, 1}
+		fmt.Println(x)
 
 		// Encrypt Vector X using Secret Key
 		cipher := TPE.Encrypt(x)
-		fmt.Println("Generated Negative Case Cipher.\n" + cipher)
+		fmt.Println("Generated Negative Case Cipher.\n" + url.QueryEscape(cipher))
+
+		// Decrypt Cipher and obtain result
+		dec := TPE.Decrypt(cipher, token)
+		fmt.Println("\n\nDecrypted Result: " + fmt.Sprint(dec))
 
 		// Send Cipher to server
 		sendReadingHTTP(ClientConfig.NetID, cipher, server)
