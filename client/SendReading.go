@@ -8,9 +8,10 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"strings"
 )
 
-func SendReading(positive bool, server string) {
+func SendReading(positive bool, server string) bool {
 	// Load Config JSON
 	configJSON, _ := ioutil.ReadFile("ClientConfig.json")
 	ClientConfig := clientConfig{}
@@ -47,7 +48,8 @@ func SendReading(positive bool, server string) {
 		fmt.Println("Generated Positive Case Cipher.\n" + cipher)
 
 		// Send Cipher to server
-		sendReadingHTTP(ClientConfig.NetID, cipher, server)
+		flag := sendReadingHTTP(ClientConfig.NetID, cipher, server)
+		return flag
 	} else {
 		// Negative Case
 		// Create Vector X
@@ -58,11 +60,12 @@ func SendReading(positive bool, server string) {
 		fmt.Println("Generated Negative Case Cipher.\n" + cipher)
 
 		// Send Cipher to server
-		sendReadingHTTP(ClientConfig.NetID, cipher, server)
+		flag := sendReadingHTTP(ClientConfig.NetID, cipher, server)
+		return flag
 	}
 }
 
-func sendReadingHTTP(NetID string, cipher string, server string) {
+func sendReadingHTTP(NetID string, cipher string, server string) bool {
 	// Get JWT Authentication Token
 	jwt := loginJWT("p1", "1234", server)
 	fmt.Println(jwt)
@@ -84,7 +87,14 @@ func sendReadingHTTP(NetID string, cipher string, server string) {
 		fmt.Println(err)
 	}
 
-	fmt.Println("Sent HTTP POST request containing Cipher. RES=" + string(body))
+	out := string(body)
+
+	fmt.Println("Sent HTTP POST request containing Cipher. RES=" + out)
+	if strings.Contains(out, "1") {
+		return true
+	} else {
+		return false
+	}
 }
 
 func loginJWT(username string, password string, server string) string {
