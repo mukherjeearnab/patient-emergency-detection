@@ -8,8 +8,10 @@ const main = async () => {
             process.env.TPE_N,
             process.env.TPE_THETA,
         ]);
+        console.log("TPE SET!");
+        process.exit();
     } catch (error) {
-        console.error("TPE Config set!", error);
+        console.error("TPE Config NOT set!", error);
     }
 };
 
