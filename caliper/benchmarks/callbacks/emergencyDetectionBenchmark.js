@@ -13,7 +13,7 @@ module.exports.init = async function (blockchain, context, args) {
     clientArgs = args;
     clientIdx = context.clientIdx.toString();
     try {
-        const assetID = `TOK_${clientIdx}_${i}_${clientArgs.seed}`;
+        const assetID = `TOK_${clientIdx}_${clientArgs.seed}`;
         console.log(`Client ${clientIdx}: Creating Token ${assetID}`);
         const myArgs = {
             chaincodeFunction: "createToken",
@@ -34,7 +34,7 @@ module.exports.run = function () {
         chaincodeFunction: "checkReading",
         invokerIdentity: "Admin@patient.health.com",
         chaincodeArguments: [
-            `TOK_${clientIdx}_${i}_${clientArgs.seed}`,
+            `TOK_${clientIdx}_${clientArgs.seed}`,
             "AQAAAEdGQQAIAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJlokqt2eeI/3lzc/AcU4z82yDpgSzXrP01+n8F8g/s//SY5beoU2z+6Fpds2TnzP6B9L/JToay/U2NZMypt3D9coatP2/7OP+BO3WUSMpY/3PblAKjDwb/Mk3EPEhfQP47gH9iGA+W/qFp3eUbSyz8I+aDpApfnvxuoc4tKDcs/rSHMUTIp4T9K4d8Pl6XUPzChfq4Y4rg/eCOvLbHk8D/jQwxvh3fhv/FbP4qH/us/pOXqXfYg8L9cbbmU3BfgP1ibOYCqReI/vz58cKGH4D/qMYUnqNvmP9OdngQb0fo/iPZimnu4yT9Y/LQvSu3yP5uMYSRKGtW/AgU1qwcP3j/rV7j8B33fPwpuetQ6XtE/gIs9NPZVlD/gKVh1GxLsP9qZOqOnnuO/gSzPlmfD5z9eBKlyxk3vvzqqQWEF5t0/RWwHCLBazT+QwmHpATKmv4SnKXp279u/wGy+bRm6sL/IcaOotNHuv4jXZh2t5LI/XQx2wPc78L/syHFRzr/NP7K0ujy5BOA/ZOosHex04D8k9LkiRDvkP0kXGBTd7fY/4DJyr3h/0T86OofkBlHwP4BW4TVI9MS/XzzUBADt2D+BxW/ddZDcP2oIAeZgocA/QO2dYR6KkD8I5pqybxbkP5IDVdhenOi/whHIBgXz3j9qWAnbMDntvxbE+/JVONk/",
         ],
     };
