@@ -1,0 +1,274 @@
+{
+    "caliper": {
+        "blockchain": "fabric"
+    },
+    "clients": {
+        "Admin@patient.health.com": {
+            "client": {
+                "credentialStore": {
+                    "path": "tmp/hfc-kvs/patient",
+                    "cryptoStore": {
+                        "path": "tmp/hfc-kvs/patient"
+                    }
+                },
+                "organization": "patient",
+                "clientPrivateKey": {
+                    "path": "../backend/crypto-config/peerOrganizations/patient.health.com/users/Admin@patient.health.com/msp/keystore/C1_PRIVATE_KEY"
+                },
+                "clientSignedCert": {
+                    "path": "../backend/crypto-config/peerOrganizations/patient.health.com/users/Admin@patient.health.com/msp/signcerts/Admin@patient.health.com-cert.pem"
+                },
+                "connection": {
+                    "timeout": {
+                        "peer": {
+                            "endorser": "300"
+                        }
+                    }
+                }
+            }
+        },
+        "Admin@phc.health.com": {
+            "client": {
+                "credentialStore": {
+                    "path": "tmp/hfc-kvs/phc",
+                    "cryptoStore": {
+                        "path": "tmp/hfc-kvs/phc"
+                    }
+                },
+                "organization": "phc",
+                "clientPrivateKey": {
+                    "path": "../backend/crypto-config/peerOrganizations/phc.health.com/users/Admin@phc.health.com/msp/keystore/C2_PRIVATE_KEY"
+                },
+                "clientSignedCert": {
+                    "path": "../backend/crypto-config/peerOrganizations/phc.health.com/users/Admin@phc.health.com/msp/signcerts/Admin@phc.health.com-cert.pem"
+                },
+                "connection": {
+                    "timeout": {
+                        "peer": {
+                            "endorser": "300"
+                        }
+                    }
+                }
+            }
+        },
+        "Admin@hospital.health.com": {
+            "client": {
+                "credentialStore": {
+                    "path": "tmp/hfc-kvs/hospital",
+                    "cryptoStore": {
+                        "path": "tmp/hfc-kvs/hospital"
+                    }
+                },
+                "organization": "hospital",
+                "clientPrivateKey": {
+                    "path": "../backend/crypto-config/peerOrganizations/hospital.health.com/users/Admin@hospital.health.com/msp/keystore/C3_PRIVATE_KEY"
+                },
+                "clientSignedCert": {
+                    "path": "../backend/crypto-config/peerOrganizations/hospital.health.com/users/Admin@hospital.health.com/msp/signcerts/Admin@hospital.health.com-cert.pem"
+                },
+                "connection": {
+                    "timeout": {
+                        "peer": {
+                            "endorser": "300"
+                        }
+                    }
+                }
+            }
+        },
+        "Admin@healthadmin.health.com": {
+            "client": {
+                "credentialStore": {
+                    "path": "tmp/hfc-kvs/healthadmin",
+                    "cryptoStore": {
+                        "path": "tmp/hfc-kvs/healthadmin"
+                    }
+                },
+                "organization": "healthadmin",
+                "clientPrivateKey": {
+                    "path": "../backend/crypto-config/peerOrganizations/healthadmin.health.com/users/Admin@healthadmin.health.com/msp/keystore/C4_PRIVATE_KEY"
+                },
+                "clientSignedCert": {
+                    "path": "../backend/crypto-config/peerOrganizations/healthadmin.health.com/users/Admin@healthadmin.health.com/msp/signcerts/Admin@healthadmin.health.com-cert.pem"
+                },
+                "connection": {
+                    "timeout": {
+                        "peer": {
+                            "endorser": "300"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "channels": {
+        "mainchannel": {
+            "created": true,
+            "chaincodes": [
+                {
+                    "id": "emergencydetection_cc",
+                    "version": "1.0"
+                },
+                {
+                    "id": "patientprofile_cc",
+                    "version": "1.0"
+                },
+                {
+                    "id": "token_cc",
+                    "version": "1.0"
+                },
+                {
+                    "id": "tpeconfig_cc",
+                    "version": "1.0"
+                }
+            ]
+        }
+    },
+    "name": "health-emergency-detection",
+    "organizations": {
+        "patient": {
+            "mspid": "PatientMSP",
+            "peers": [
+                "peer0.patient.health.com"
+            ],
+            "certificateAuthorities": [
+                "ca.patient.health.com"
+            ],
+            "adminPrivateKey": {
+                "path": "../backend/crypto-config/peerOrganizations/patient.health.com/users/Admin@patient.health.com/msp/keystore/C1_PRIVATE_KEY"
+            },
+            "signedCert": {
+                "path": "../backend/crypto-config/peerOrganizations/patient.health.com/users/Admin@patient.health.com/msp/signcerts/Admin@patient.health.com-cert.pem"
+            }
+        },
+        "phc": {
+            "mspid": "PHCMSP",
+            "peers": [
+                "peer0.phc.health.com"
+            ],
+            "certificateAuthorities": [
+                "ca.phc.health.com"
+            ],
+            "adminPrivateKey": {
+                "path": "../backend/crypto-config/peerOrganizations/phc.health.com/users/Admin@phc.health.com/msp/keystore/C2_PRIVATE_KEY"
+            },
+            "signedCert": {
+                "path": "../backend/crypto-config/peerOrganizations/phc.health.com/users/Admin@phc.health.com/msp/signcerts/Admin@phc.health.com-cert.pem"
+            }
+        },
+        "hospital": {
+            "mspid": "HospitalMSP",
+            "peers": [
+                "peer0.hospital.health.com"
+            ],
+            "certificateAuthorities": [
+                "ca.hospital.health.com"
+            ],
+            "adminPrivateKey": {
+                "path": "../backend/crypto-config/peerOrganizations/hospital.health.com/users/Admin@hospital.health.com/msp/keystore/C3_PRIVATE_KEY"
+            },
+            "signedCert": {
+                "path": "../backend/crypto-config/peerOrganizations/hospital.health.com/users/Admin@hospital.health.com/msp/signcerts/Admin@hospital.health.com-cert.pem"
+            }
+        },
+        "healthadmin": {
+            "mspid": "HealthAdminMSP",
+            "peers": [
+                "peer0.healthadmin.health.com"
+            ],
+            "certificateAuthorities": [
+                "ca.healthadmin.health.com"
+            ],
+            "adminPrivateKey": {
+                "path": "../backend/crypto-config/peerOrganizations/healthadmin.health.com/users/Admin@healthadmin.health.com/msp/keystore/C4_PRIVATE_KEY"
+            },
+            "signedCert": {
+                "path": "../backend/crypto-config/peerOrganizations/healthadmin.health.com/users/Admin@healthadmin.health.com/msp/signcerts/Admin@healthadmin.health.com-cert.pem"
+            }
+        }
+    },
+    "peers": {
+        "peer0.patient.health.com": {
+            "url": "grpcs://localhost:7051",
+            "tlsCACerts": {
+                "pem": "PEERPEM1"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.patient.health.com",
+                "hostnameOverride": "peer0.patient.health.com"
+            }
+        },
+        "peer0.phc.health.com": {
+            "url": "grpcs://localhost:8051",
+            "tlsCACerts": {
+                "pem": "PEERPEM2"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.phc.health.com",
+                "hostnameOverride": "peer0.phc.health.com"
+            }
+        },
+        "peer0.hospital.health.com": {
+            "url": "grpcs://localhost:9051",
+            "tlsCACerts": {
+                "pem": "PEERPEM3"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.hospital.health.com",
+                "hostnameOverride": "peer0.hospital.health.com"
+            }
+        },
+        "peer0.healthadmin.health.com": {
+            "url": "grpcs://localhost:10051",
+            "tlsCACerts": {
+                "pem": "PEERPEM4"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.healthadmin.health.com",
+                "hostnameOverride": "peer0.healthadmin.health.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.patient.health.com": {
+            "url": "https://localhost:7054",
+            "caName": "ca-patient",
+            "tlsCACerts": {
+                "pem": "CAPEM1"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        },
+        "ca.phc.health.com": {
+            "url": "https://localhost:8054",
+            "caName": "ca-phc",
+            "tlsCACerts": {
+                "pem": "CAPEM2"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        },
+        "ca.hospital.health.com": {
+            "url": "https://localhost:9054",
+            "caName": "ca-hospital",
+            "tlsCACerts": {
+                "pem": "CAPEM3"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        },
+        "ca.healthadmin.health.com": {
+            "url": "https://localhost:10054",
+            "caName": "ca-healthadmin",
+            "tlsCACerts": {
+                "pem": "CAPEM4"
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    },
+    "version": "1.0"
+}
