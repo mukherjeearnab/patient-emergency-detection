@@ -19,10 +19,7 @@ module.exports.init = async function (blockchain, context, args) {
             const myArgs = {
                 chaincodeFunction: "createPatientProfile",
                 invokerIdentity: "Admin@patient.health.com",
-                chaincodeArguments: [
-                    assetID,
-                    "patient"
-                ],
+                chaincodeArguments: [assetID, "patient"],
             };
             await bc.bcObj.invokeSmartContract(ctx, contractID, version, myArgs);
         } catch (error) {

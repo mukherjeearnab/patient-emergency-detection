@@ -22,10 +22,7 @@ module.exports.run = async function () {
             const myArgs = {
                 chaincodeFunction: "createPatientProfile",
                 invokerIdentity: "Admin@patient.health.com",
-                chaincodeArguments: [
-                    assetID,
-                    "patient1"
-                ],
+                chaincodeArguments: [assetID, "patient1"],
             };
             return await bc.bcObj.invokeSmartContract(ctx, contractID, version, myArgs);
         } catch (error) {

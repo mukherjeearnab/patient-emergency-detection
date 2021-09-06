@@ -1,6 +1,7 @@
 testConfig: &testConfig
     tps: &test_tps 100
     txDuration: &test_txduration 120
+    seed: &test_seed 1
 
 test:
     name: caliper_benchmark
