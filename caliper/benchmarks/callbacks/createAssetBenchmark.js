@@ -18,7 +18,7 @@ module.exports.run = async function () {
     for (let i = 0; i < clientArgs.assets; i++) {
         try {
             const assetID = `PP_${clientIdx}_${i}_${Date.now()}`;
-            console.log(`Client ${clientIdx}: Creating PatientProfile ${assetID}`);
+            // console.log(`Client ${clientIdx}: Creating PatientProfile ${assetID}`);
             const myArgs = {
                 chaincodeFunction: "createPatientProfile",
                 invokerIdentity: "Admin@patient.health.com",
