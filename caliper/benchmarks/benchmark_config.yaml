@@ -1,0 +1,74 @@
+testConfig: &testConfig
+    tps: &test_tps 100
+    txDuration: &test_txduration 120
+
+test:
+    name: caliper_benchmark
+    description: test_benchmark
+    workers:
+        type: local
+        number: 2
+    rounds:
+        - label: readAsset
+          description: Read Asset benchmark
+          chaincodeId: patientprofile_cc
+          txDuration: *test_txduration
+          rateControl:
+              type: fixed-backlog
+              opts:
+                  tps: *test_tps
+          callback: benchmarks/callbacks/readAssetBenchmark.js
+          arguments:
+              assets: 10
+              seed: 1
+        - label: createAsset
+          description: Create Asset benchmark
+          chaincodeId: patientprofile_cc
+          txDuration: *test_txduration
+          rateControl:
+              type: fixed-backlog
+              opts:
+                  tps: *test_tps
+          callback: benchmarks/callbacks/createAssetBenchmark.js
+          arguments:
+              assets: 10
+        - label: emergencyDetection
+          description: Emergency Detection benchmark
+          chaincodeId: emergencydetection_cc
+          txDuration: *test_txduration
+          rateControl:
+              type: fixed-backlog
+              opts:
+                  tps: *test_tps
+          callback: benchmarks/callbacks/emergencyDetectionBenchmark.js
+          arguments:
+              assets: 10
+              seed: 1
+
+monitor:
+    type:
+        - docker
+        - process
+    docker:
+        containers:
+            - all
+        charting:
+            polar:
+                metrics:
+                    - all
+            bar:
+                metrics:
+                    - Memory(max)
+    process:
+        processes:
+            - command: node
+              arguments: fabricClientWorker.js
+              multiOutput: avg
+        charting:
+            bar:
+                metrics:
+                    - all
+
+observer:
+    type: local
+    interval: 5
