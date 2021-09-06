@@ -15,7 +15,7 @@ test:
           chaincodeId: patientprofile_cc
           txDuration: *test_txduration
           rateControl:
-              type: fixed-backlog
+              type: fixed-rate
               opts:
                   tps: *test_tps
           callback: benchmarks/callbacks/readAssetBenchmark.js
@@ -27,7 +27,7 @@ test:
           chaincodeId: patientprofile_cc
           txDuration: *test_txduration
           rateControl:
-              type: fixed-backlog
+              type: fixed-rate
               opts:
                   tps: *test_tps
           callback: benchmarks/callbacks/createAssetBenchmark.js
@@ -38,7 +38,7 @@ test:
           chaincodeId: emergencydetection_cc
           txDuration: *test_txduration
           rateControl:
-              type: fixed-backlog
+              type: fixed-rate
               opts:
                   tps: *test_tps
           callback: benchmarks/callbacks/emergencyDetectionBenchmark.js
