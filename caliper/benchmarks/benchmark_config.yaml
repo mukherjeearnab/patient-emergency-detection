@@ -1,6 +1,8 @@
 testConfig: &testConfig
-    tps: &test_tps 100
-    txDuration: &test_txduration 120
+    rtps: &test_rtps 50
+    ctps: &test_ctps 5
+    etps: &test_etps 50
+    txDuration: &test_txduration 20
     seed: &test_seed 1
 
 test:
@@ -17,11 +19,11 @@ test:
           rateControl:
               type: fixed-rate
               opts:
-                  tps: *test_tps
+                  tps: *test_rtps
           callback: benchmarks/callbacks/readAssetBenchmark.js
           arguments:
               assets: 10
-              seed: 1
+              seed: *test_seed
         - label: createAsset
           description: Create Asset benchmark
           chaincodeId: patientprofile_cc
@@ -29,7 +31,7 @@ test:
           rateControl:
               type: fixed-rate
               opts:
-                  tps: *test_tps
+                  tps: *test_ctps
           callback: benchmarks/callbacks/createAssetBenchmark.js
           arguments:
               assets: 10
@@ -40,11 +42,11 @@ test:
           rateControl:
               type: fixed-rate
               opts:
-                  tps: *test_tps
+                  tps: *test_etps
           callback: benchmarks/callbacks/emergencyDetectionBenchmark.js
           arguments:
               assets: 10
-              seed: 1
+              seed: *test_seed
 
 monitor:
     type:
