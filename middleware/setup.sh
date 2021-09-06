@@ -9,3 +9,6 @@ npm install
 
 echo "Enrolling Admins"
 node ./setup/enroll_admin.js
+
+echo "Setting TPE Config"
+node ./setup/set_tpe_config.js
