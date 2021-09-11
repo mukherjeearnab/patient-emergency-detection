@@ -1,0 +1,746 @@
+<!doctype html>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
+<script>
+    function plotChart(divId, chartData) {
+        // Convert from stringified html, to valid JSON
+        const chartDetails = JSON.parse(chartData.replace(/&quot;/g,'"'));
+        new Chart(document.getElementById(divId), {
+            type: chartDetails.type,
+            data: {
+                labels: chartDetails.labels,
+                datasets: chartDetails.datasets
+            },
+            options: {
+                legend: { display: chartDetails.legend },
+                title: {
+                    display: true,
+                    text: chartDetails.title
+                }
+            }
+        });
+    }
+</script>
+<html>
+<head>
+    <title>Hyperledger Caliper Report</title>
+    <meta charset="UTF-8"/>
+    <style type="text/css">
+        .left-column {
+            position: fixed;
+            width:20%;
+        }
+        .left-column ul {
+            display: block;
+            padding: 0;
+            list-style: none;
+            border-bottom: 1px solid #d9d9d9;
+            font-size: 14px;
+        }
+        .left-column h2{
+            font-size: 24px;
+            font-weight: 400;
+            margin-block-end: 0.5em;
+        }
+        .left-column h3{
+            font-size: 18px;
+            font-weight: 400;
+            margin-block-end: 0.5em;
+        }
+        .left-column li{
+            margin-left: 10px;
+            margin-bottom: 5px;
+            color: #5e6b73;
+        }
+        .right-column {
+            margin-left: 22%;
+            width:60%;
+        }
+        .right-column table {
+            font-size:11px;
+            color:#333333;
+            border-width: 1px;
+            border-color: #666666;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+        }
+        .right-column h2{
+            font-weight: 400;
+        }
+        .right-column h3{
+            font-weight: 400;
+        }
+        .right-column h4 {
+            font-weight: 400;
+            margin-block-end: 0;
+        }
+        .right-column th {
+            border-width: 1px;
+            font-size: small;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #f2f2f2;
+        }
+        .right-column td {
+            border-width: 1px;
+            font-size: small;
+            padding: 8px;
+            border-style: solid;
+            border-color: #666666;
+            background-color: #ffffff;
+            font-weight: 400;
+        }
+        .tag {
+            margin-bottom: 10px;
+            padding: 5px 10px;
+        }
+        pre {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f2f2f2;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -khtml-border-radius: 5px;
+            overflow:auto;
+            max-height:300px;
+            font-size:12px;
+        }
+        .charting {
+            display:flex;
+            flex-direction:row;
+            flex-wrap: wrap;
+            page-break-inside: auto;
+        }
+        .chart {
+            display:flex;
+            flex:1;
+            max-width: 50%;
+        }
+    </style>
+</head>
+<body style="font-family: IBM Plex Sans; font-weight: 200;">
+    <main>
+        <div class="left-column">
+            <img src="https://hyperledger.github.io/caliper/assets/img/hyperledger_caliper_logo_color.png" style="width:95%;" alt="">
+            <ul>
+                <h3>&nbspBasic information</h3>
+                <li>DLT: &nbsp<span style="font-weight: 500;">fabric</span></li>
+                <li>Name: &nbsp<span style="font-weight: 500;">caliper_benchmark</span></li>
+                <li>Description: &nbsp<span style="font-weight: 500;">test_benchmark</span></li>
+                <li>Benchmark Rounds: &nbsp<span style="font-weight: 500;">3</span></li>
+                <li><a href="#benchmarkInfo">Details</a></li>
+            </ul>
+            <ul>
+                <h3>&nbspBenchmark results</h3>
+                <li><a href="#benchmarksummary">Summary</a></li>
+                    <li><a href="#readAsset">readAsset</a></li>
+                    <li><a href="#createAsset">createAsset</a></li>
+                    <li><a href="#emergencyDetection">emergencyDetection</a></li>
+            </ul>
+            <ul>
+                <h3>&nbspSystem under test</h3>
+                <li><a href="#sutdetails">Details</a></li>
+            </ul>
+        </div>
+
+        <div class="right-column">
+            <h1 style="padding-top: 3em; font-weight: 500;">Caliper report</h1>
+            <div style="border-bottom: 1px solid #d9d9d9; margin-bottom: 10px;" id="benchmarksummary">
+                <table style="min-width: 100%;">
+                    <h3>Summary of performance metrics</h3>
+                    <tr>
+                         <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                    </tr>
+
+                    <tr>
+                         <td>readAsset</td> <td>12001</td> <td>0</td> <td>600.1</td> <td>0.04</td> <td>0.01</td> <td>0.01</td> <td>599.7</td>
+                    </tr>
+                    <tr>
+                         <td>createAsset</td> <td>1777</td> <td>0</td> <td>88.8</td> <td>2.50</td> <td>0.65</td> <td>1.82</td> <td>80.9</td>
+                    </tr>
+                    <tr>
+                         <td>emergencyDetection</td> <td>102</td> <td>0</td> <td>5.2</td> <td>3.63</td> <td>0.02</td> <td>0.45</td> <td>5.2</td>
+                    </tr>
+                </table>
+            </div>
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="readAsset">
+                <h2>Benchmark round: readAsset</h2>
+                <p>Read Asset benchmark</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 20
+rateControl:
+  type: fixed-rate
+  opts:
+    tps: 600
+</pre>
+                        <h3>Performance metrics for readAsset</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>readAsset</td> <td>12001</td> <td>0</td> <td>600.1</td> <td>0.04</td> <td>0.01</td> <td>0.01</td> <td>599.7</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for readAsset</h3>
+                            <h4>Resource monitor: docker</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [MB]</th> <th>Memory(avg) [MB]</th> <th>Traffic In [MB]</th> <th>Traffic Out [MB]</th> <th>Disc Write [MB]</th> <th>Disc Read [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-patientprofile_cc-1.0</td> <td>55.53</td> <td>22.91</td> <td>7.57</td> <td>6.57</td> <td>23.8</td> <td>10.7</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>healthmongo</td> <td>1.22</td> <td>0.70</td> <td>157</td> <td>157</td> <td>0.000102</td> <td>0.00</td> <td>0.172</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-emergencydetection_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>cli</td> <td>0.00</td> <td>0.00</td> <td>0.445</td> <td>0.445</td> <td>0.000142</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.patient.health.com</td> <td>146.88</td> <td>62.09</td> <td>86.2</td> <td>73.5</td> <td>33.2</td> <td>44.9</td> <td>13.7</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.healthadmin.health.com</td> <td>5.43</td> <td>1.96</td> <td>61.4</td> <td>60.2</td> <td>0.151</td> <td>0.181</td> <td>0.273</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.phc.health.com</td> <td>4.65</td> <td>1.92</td> <td>60.1</td> <td>58.7</td> <td>0.150</td> <td>0.179</td> <td>0.273</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.hospital.health.com</td> <td>5.05</td> <td>1.98</td> <td>54.4</td> <td>53.8</td> <td>0.151</td> <td>0.180</td> <td>0.273</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer0.health.com</td> <td>1.73</td> <td>0.30</td> <td>41.0</td> <td>40.8</td> <td>0.0954</td> <td>0.325</td> <td>0.254</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.patient.health.com</td> <td>376.71</td> <td>159.48</td> <td>83.2</td> <td>74.0</td> <td>3.75</td> <td>6.08</td> <td>0.703</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.phc.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.52</td> <td>5.52</td> <td>0.000142</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.phc.health.com</td> <td>22.38</td> <td>3.99</td> <td>71.6</td> <td>67.1</td> <td>0.0345</td> <td>0.0410</td> <td>0.797</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.patient.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.59</td> <td>5.59</td> <td>0.000142</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.hospital.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.73</td> <td>5.73</td> <td>0.000142</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.hospital.health.com</td> <td>22.83</td> <td>3.89</td> <td>71.2</td> <td>66.7</td> <td>0.0350</td> <td>0.0409</td> <td>0.797</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.healthadmin.health.com</td> <td>21.80</td> <td>3.44</td> <td>71.6</td> <td>67.0</td> <td>0.0352</td> <td>0.0409</td> <td>0.797</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.healthadmin.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.63</td> <td>5.63</td> <td>0.000142</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea0">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea0", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;55.53&quot;,&quot;0.00&quot;,&quot;1.22&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;146.88&quot;,&quot;5.43&quot;,&quot;4.65&quot;,&quot;5.05&quot;,&quot;1.73&quot;,&quot;376.71&quot;,&quot;0.00&quot;,&quot;22.38&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;22.83&quot;,&quot;21.80&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea1">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea1", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;22.91&quot;,&quot;0.00&quot;,&quot;0.70&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;62.09&quot;,&quot;1.96&quot;,&quot;1.92&quot;,&quot;1.98&quot;,&quot;0.30&quot;,&quot;159.48&quot;,&quot;0.00&quot;,&quot;3.99&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;3.89&quot;,&quot;3.44&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea2">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea2", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.57&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;86.2&quot;,&quot;61.4&quot;,&quot;60.1&quot;,&quot;54.4&quot;,&quot;41.0&quot;,&quot;83.2&quot;,&quot;5.52&quot;,&quot;71.6&quot;,&quot;5.59&quot;,&quot;5.73&quot;,&quot;71.2&quot;,&quot;71.6&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea3">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea3", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(avg) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;6.57&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;73.5&quot;,&quot;60.2&quot;,&quot;58.7&quot;,&quot;53.8&quot;,&quot;40.8&quot;,&quot;74.0&quot;,&quot;5.52&quot;,&quot;67.1&quot;,&quot;5.59&quot;,&quot;5.73&quot;,&quot;66.7&quot;,&quot;67.0&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea4">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea4", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic In [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;23.8&quot;,&quot;0.00&quot;,&quot;0.000102&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.000142&quot;,&quot;33.2&quot;,&quot;0.151&quot;,&quot;0.150&quot;,&quot;0.151&quot;,&quot;0.0954&quot;,&quot;3.75&quot;,&quot;0.000142&quot;,&quot;0.0345&quot;,&quot;0.000142&quot;,&quot;0.000142&quot;,&quot;0.0350&quot;,&quot;0.0352&quot;,&quot;0.000142&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea5">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea5", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic Out [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;10.7&quot;,0,&quot;0.00&quot;,0,0,0,0,&quot;0.00&quot;,&quot;44.9&quot;,&quot;0.181&quot;,&quot;0.179&quot;,&quot;0.180&quot;,&quot;0.325&quot;,&quot;6.08&quot;,&quot;0.00&quot;,&quot;0.0410&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.0409&quot;,&quot;0.0409&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea6">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea6", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Write [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.172&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;13.7&quot;,&quot;0.273&quot;,&quot;0.273&quot;,&quot;0.273&quot;,&quot;0.254&quot;,&quot;0.703&quot;,&quot;0.00&quot;,&quot;0.797&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.797&quot;,&quot;0.797&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_polarArea7">
+                                        <script>plotChart("MonitorDocker_readAsset_polarArea7", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Read [B]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_readAsset_horizontalBar0">
+                                        <script>plotChart("MonitorDocker_readAsset_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.57&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;86.2&quot;,&quot;61.4&quot;,&quot;60.1&quot;,&quot;54.4&quot;,&quot;41.0&quot;,&quot;83.2&quot;,&quot;5.52&quot;,&quot;71.6&quot;,&quot;5.59&quot;,&quot;5.73&quot;,&quot;71.2&quot;,&quot;71.6&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+                            <h4>Resource monitor: process</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [B]</th> <th>Memory(avg) [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>node fabricClientWorker.js(avg)</td> <td>NaN</td> <td>NaN</td> <td>-</td> <td>-</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_readAsset_horizontalBar0">
+                                        <script>plotChart("MonitorProcess_readAsset_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_readAsset_horizontalBar1">
+                                        <script>plotChart("MonitorProcess_readAsset_horizontalBar1", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_readAsset_horizontalBar2">
+                                        <script>plotChart("MonitorProcess_readAsset_horizontalBar2", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_readAsset_horizontalBar3">
+                                        <script>plotChart("MonitorProcess_readAsset_horizontalBar3", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(avg) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="createAsset">
+                <h2>Benchmark round: createAsset</h2>
+                <p>Create Asset benchmark</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 20
+rateControl:
+  type: fixed-rate
+  opts:
+    tps: 90
+</pre>
+                        <h3>Performance metrics for createAsset</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>createAsset</td> <td>1777</td> <td>0</td> <td>88.8</td> <td>2.50</td> <td>0.65</td> <td>1.82</td> <td>80.9</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for createAsset</h3>
+                            <h4>Resource monitor: docker</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [MB]</th> <th>Memory(avg) [MB]</th> <th>Traffic In [MB]</th> <th>Traffic Out [MB]</th> <th>Disc Write [MB]</th> <th>Disc Read [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-patientprofile_cc-1.0</td> <td>20.42</td> <td>10.57</td> <td>9.08</td> <td>7.30</td> <td>3.63</td> <td>1.98</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>healthmongo</td> <td>1.36</td> <td>0.65</td> <td>157</td> <td>157</td> <td>0.000102</td> <td>0.00</td> <td>0.117</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-emergencydetection_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>cli</td> <td>0.00</td> <td>0.00</td> <td>0.445</td> <td>0.445</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.patient.health.com</td> <td>50.21</td> <td>28.11</td> <td>123</td> <td>104</td> <td>11.4</td> <td>19.1</td> <td>7.34</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.healthadmin.health.com</td> <td>21.99</td> <td>11.60</td> <td>106</td> <td>86.4</td> <td>6.26</td> <td>0.532</td> <td>20.8</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.phc.health.com</td> <td>19.81</td> <td>11.24</td> <td>108</td> <td>85.9</td> <td>6.27</td> <td>0.524</td> <td>20.8</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.hospital.health.com</td> <td>22.37</td> <td>11.06</td> <td>104</td> <td>81.9</td> <td>6.25</td> <td>0.528</td> <td>20.8</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer0.health.com</td> <td>20.11</td> <td>8.61</td> <td>66.9</td> <td>50.1</td> <td>6.27</td> <td>23.7</td> <td>12.1</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.patient.health.com</td> <td>141.93</td> <td>82.08</td> <td>104</td> <td>94.5</td> <td>1.10</td> <td>1.06</td> <td>7.96</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.phc.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.52</td> <td>5.44</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.phc.health.com</td> <td>51.53</td> <td>27.07</td> <td>87.1</td> <td>78.8</td> <td>0.479</td> <td>0.445</td> <td>7.96</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.patient.health.com</td> <td>1.89</td> <td>0.13</td> <td>5.59</td> <td>5.54</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.hospital.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.73</td> <td>5.73</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.hospital.health.com</td> <td>46.70</td> <td>27.38</td> <td>89.4</td> <td>80.3</td> <td>0.481</td> <td>0.445</td> <td>7.96</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.healthadmin.health.com</td> <td>47.53</td> <td>26.31</td> <td>86.9</td> <td>79.0</td> <td>0.481</td> <td>0.446</td> <td>7.96</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.healthadmin.health.com</td> <td>0.00</td> <td>0.00</td> <td>5.63</td> <td>5.63</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea0">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea0", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;20.42&quot;,&quot;0.00&quot;,&quot;1.36&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;50.21&quot;,&quot;21.99&quot;,&quot;19.81&quot;,&quot;22.37&quot;,&quot;20.11&quot;,&quot;141.93&quot;,&quot;0.00&quot;,&quot;51.53&quot;,&quot;1.89&quot;,&quot;0.00&quot;,&quot;46.70&quot;,&quot;47.53&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea1">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea1", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;10.57&quot;,&quot;0.00&quot;,&quot;0.65&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;28.11&quot;,&quot;11.60&quot;,&quot;11.24&quot;,&quot;11.06&quot;,&quot;8.61&quot;,&quot;82.08&quot;,&quot;0.00&quot;,&quot;27.07&quot;,&quot;0.13&quot;,&quot;0.00&quot;,&quot;27.38&quot;,&quot;26.31&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea2">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea2", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;9.08&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;123&quot;,&quot;106&quot;,&quot;108&quot;,&quot;104&quot;,&quot;66.9&quot;,&quot;104&quot;,&quot;5.52&quot;,&quot;87.1&quot;,&quot;5.59&quot;,&quot;5.73&quot;,&quot;89.4&quot;,&quot;86.9&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea3">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea3", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(avg) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.30&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;104&quot;,&quot;86.4&quot;,&quot;85.9&quot;,&quot;81.9&quot;,&quot;50.1&quot;,&quot;94.5&quot;,&quot;5.44&quot;,&quot;78.8&quot;,&quot;5.54&quot;,&quot;5.73&quot;,&quot;80.3&quot;,&quot;79.0&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea4">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea4", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic In [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;3.63&quot;,&quot;0.00&quot;,&quot;0.000102&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;11.4&quot;,&quot;6.26&quot;,&quot;6.27&quot;,&quot;6.25&quot;,&quot;6.27&quot;,&quot;1.10&quot;,&quot;0.00&quot;,&quot;0.479&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.481&quot;,&quot;0.481&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea5">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea5", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic Out [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;1.98&quot;,0,&quot;0.00&quot;,0,0,0,0,&quot;0.00&quot;,&quot;19.1&quot;,&quot;0.532&quot;,&quot;0.524&quot;,&quot;0.528&quot;,&quot;23.7&quot;,&quot;1.06&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;0.446&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea6">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea6", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Write [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.117&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;7.34&quot;,&quot;20.8&quot;,&quot;20.8&quot;,&quot;20.8&quot;,&quot;12.1&quot;,&quot;7.96&quot;,&quot;0.00&quot;,&quot;7.96&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;7.96&quot;,&quot;7.96&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_polarArea7">
+                                        <script>plotChart("MonitorDocker_createAsset_polarArea7", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Read [B]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_createAsset_horizontalBar0">
+                                        <script>plotChart("MonitorDocker_createAsset_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;9.08&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;123&quot;,&quot;106&quot;,&quot;108&quot;,&quot;104&quot;,&quot;66.9&quot;,&quot;104&quot;,&quot;5.52&quot;,&quot;87.1&quot;,&quot;5.59&quot;,&quot;5.73&quot;,&quot;89.4&quot;,&quot;86.9&quot;,&quot;5.63&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+                            <h4>Resource monitor: process</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [B]</th> <th>Memory(avg) [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>node fabricClientWorker.js(avg)</td> <td>NaN</td> <td>NaN</td> <td>-</td> <td>-</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_createAsset_horizontalBar0">
+                                        <script>plotChart("MonitorProcess_createAsset_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_createAsset_horizontalBar1">
+                                        <script>plotChart("MonitorProcess_createAsset_horizontalBar1", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_createAsset_horizontalBar2">
+                                        <script>plotChart("MonitorProcess_createAsset_horizontalBar2", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_createAsset_horizontalBar3">
+                                        <script>plotChart("MonitorProcess_createAsset_horizontalBar3", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(avg) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;" id="emergencyDetection">
+                <h2>Benchmark round: emergencyDetection</h2>
+                <p>Emergency Detection benchmark</p>
+                <pre style="overflow: visible;white-space: pre-wrap;max-height:100%;">txDuration: 20
+rateControl:
+  type: fixed-rate
+  opts:
+    tps: 5
+</pre>
+                        <h3>Performance metrics for emergencyDetection</h3>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                     <th>Name</th> <th>Succ</th> <th>Fail</th> <th>Send Rate (TPS)</th> <th>Max Latency (s)</th> <th>Min Latency (s)</th> <th>Avg Latency (s)</th> <th>Throughput (TPS)</th>
+                                </tr>
+                                <tr>
+                                     <td>emergencyDetection</td> <td>102</td> <td>0</td> <td>5.2</td> <td>3.63</td> <td>0.02</td> <td>0.45</td> <td>5.2</td>
+                                </tr>
+                            </table>
+                        <h3>Resource utilization for emergencyDetection</h3>
+                            <h4>Resource monitor: docker</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [MB]</th> <th>Memory(avg) [MB]</th> <th>Traffic In [B]</th> <th>Traffic Out [B]</th> <th>Disc Write [KB]</th> <th>Disc Read [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-patientprofile_cc-1.0</td> <td>0.02</td> <td>0.00</td> <td>7.00</td> <td>7.00</td> <td>671</td> <td>396</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>healthmongo</td> <td>1.53</td> <td>0.72</td> <td>157</td> <td>157</td> <td>0.00</td> <td>0.00</td> <td>72.0</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.phc.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-tpeconfig_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-token_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>dev-peer0.patient.health.com-emergencydetection_cc-1.0</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>-</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>cli</td> <td>0.00</td> <td>0.00</td> <td>0.445</td> <td>0.445</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.patient.health.com</td> <td>3.25</td> <td>3.25</td> <td>123</td> <td>123</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.healthadmin.health.com</td> <td>4.50</td> <td>4.50</td> <td>106</td> <td>106</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.phc.health.com</td> <td>12.97</td> <td>12.97</td> <td>136</td> <td>136</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>peer0.hospital.health.com</td> <td>4.42</td> <td>4.42</td> <td>104</td> <td>104</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>orderer0.health.com</td> <td>0.09</td> <td>0.09</td> <td>45.1</td> <td>45.1</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.patient.health.com</td> <td>9.82</td> <td>9.82</td> <td>99.8</td> <td>99.8</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.phc.health.com</td> <td>0.00</td> <td>0.00</td> <td>4.32</td> <td>4.32</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.phc.health.com</td> <td>0.82</td> <td>0.82</td> <td>83.2</td> <td>83.2</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.patient.health.com</td> <td>0.00</td> <td>0.00</td> <td>4.72</td> <td>4.72</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.hospital.health.com</td> <td>0.00</td> <td>0.00</td> <td>4.75</td> <td>4.75</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.hospital.health.com</td> <td>2.80</td> <td>2.80</td> <td>84.1</td> <td>84.1</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>couchdb.peer0.healthadmin.health.com</td> <td>0.64</td> <td>0.64</td> <td>81.4</td> <td>81.4</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                    <tr>
+                                         <td>ca.healthadmin.health.com</td> <td>0.00</td> <td>0.00</td> <td>4.55</td> <td>4.55</td> <td>0.00</td> <td>0.00</td> <td>0.00</td> <td>0.00</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea0">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea0", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.02&quot;,&quot;0.00&quot;,&quot;1.53&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;3.25&quot;,&quot;4.50&quot;,&quot;12.97&quot;,&quot;4.42&quot;,&quot;0.09&quot;,&quot;9.82&quot;,&quot;0.00&quot;,&quot;0.82&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;2.80&quot;,&quot;0.64&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea1">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea1", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.72&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;3.25&quot;,&quot;4.50&quot;,&quot;12.97&quot;,&quot;4.42&quot;,&quot;0.09&quot;,&quot;9.82&quot;,&quot;0.00&quot;,&quot;0.82&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;2.80&quot;,&quot;0.64&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea2">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea2", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.00&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;123&quot;,&quot;106&quot;,&quot;136&quot;,&quot;104&quot;,&quot;45.1&quot;,&quot;99.8&quot;,&quot;4.32&quot;,&quot;83.2&quot;,&quot;4.72&quot;,&quot;4.75&quot;,&quot;84.1&quot;,&quot;81.4&quot;,&quot;4.55&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea3">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea3", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Memory(avg) [MB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.00&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;123&quot;,&quot;106&quot;,&quot;136&quot;,&quot;104&quot;,&quot;45.1&quot;,&quot;99.8&quot;,&quot;4.32&quot;,&quot;83.2&quot;,&quot;4.72&quot;,&quot;4.75&quot;,&quot;84.1&quot;,&quot;81.4&quot;,&quot;4.55&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea4">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea4", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic In [B]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;671&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea5">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea5", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Traffic Out [B]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;396&quot;,0,&quot;0.00&quot;,0,0,0,0,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea6">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea6", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Write [KB]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;72.0&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_polarArea7">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_polarArea7", "{&quot;type&quot;:&quot;polarArea&quot;,&quot;title&quot;:&quot;Disc Read [B]&quot;,&quot;legend&quot;:true,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorDocker_emergencyDetection_horizontalBar0">
+                                        <script>plotChart("MonitorDocker_emergencyDetection_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [MB]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;dev-peer0.patient.health.com-patientprofile_cc-1.0&quot;,&quot;dev-peer0.phc.health.com-tpeconfig_cc-1.0&quot;,&quot;healthmongo&quot;,&quot;dev-peer0.phc.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-tpeconfig_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-token_cc-1.0&quot;,&quot;dev-peer0.patient.health.com-emergencydetection_cc-1.0&quot;,&quot;cli&quot;,&quot;peer0.patient.health.com&quot;,&quot;peer0.healthadmin.health.com&quot;,&quot;peer0.phc.health.com&quot;,&quot;peer0.hospital.health.com&quot;,&quot;orderer0.health.com&quot;,&quot;couchdb.peer0.patient.health.com&quot;,&quot;ca.phc.health.com&quot;,&quot;couchdb.peer0.phc.health.com&quot;,&quot;ca.patient.health.com&quot;,&quot;ca.hospital.health.com&quot;,&quot;couchdb.peer0.hospital.health.com&quot;,&quot;couchdb.peer0.healthadmin.health.com&quot;,&quot;ca.healthadmin.health.com&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;,&quot;rgb(0,58,132,0.6)&quot;,&quot;rgb(191,219,255,0.6)&quot;,&quot;rgb(128,183,255,0.6)&quot;,&quot;rgb(255,71,0,0.6)&quot;,&quot;rgb(179,50,0,0.6)&quot;,&quot;rgb(255,209,191,0.6)&quot;,&quot;rgb(255,163,128,0.6)&quot;,&quot;rgb(31,235,0,0.6)&quot;,&quot;rgb(22,164,0,0.6)&quot;,&quot;rgb(200,255,191,0.6)&quot;,&quot;rgb(144,255,128,0.6)&quot;,&quot;rgb(0,82,189,0.6)&quot;],&quot;data&quot;:[&quot;7.00&quot;,&quot;0.00&quot;,&quot;157&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.00&quot;,&quot;0.445&quot;,&quot;123&quot;,&quot;106&quot;,&quot;136&quot;,&quot;104&quot;,&quot;45.1&quot;,&quot;99.8&quot;,&quot;4.32&quot;,&quot;83.2&quot;,&quot;4.72&quot;,&quot;4.75&quot;,&quot;84.1&quot;,&quot;81.4&quot;,&quot;4.55&quot;]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+                            <h4>Resource monitor: process</h4>
+                            <table style="min-width: 100%;">
+                                <tr>
+                                <table>
+                                    <tr>
+                                         <th>Name</th> <th>CPU%(max)</th> <th>CPU%(avg)</th> <th>Memory(max) [B]</th> <th>Memory(avg) [B]</th>
+                                    </tr>
+                                    <tr>
+                                         <td>node fabricClientWorker.js(avg)</td> <td>NaN</td> <td>NaN</td> <td>-</td> <td>-</td>
+                                    </tr>
+                                </table>
+                                </tr>
+                            </table>
+                            <div class="charting">
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_emergencyDetection_horizontalBar0">
+                                        <script>plotChart("MonitorProcess_emergencyDetection_horizontalBar0", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(max)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_emergencyDetection_horizontalBar1">
+                                        <script>plotChart("MonitorProcess_emergencyDetection_horizontalBar1", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;CPU%(avg)&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_emergencyDetection_horizontalBar2">
+                                        <script>plotChart("MonitorProcess_emergencyDetection_horizontalBar2", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(max) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                                <div class="chart">
+                                    <canvas id="MonitorProcess_emergencyDetection_horizontalBar3">
+                                        <script>plotChart("MonitorProcess_emergencyDetection_horizontalBar3", "{&quot;type&quot;:&quot;horizontalBar&quot;,&quot;title&quot;:&quot;Memory(avg) [B]&quot;,&quot;legend&quot;:false,&quot;labels&quot;:[&quot;node fabricClientWorker.js(avg)&quot;],&quot;datasets&quot;:[{&quot;backgroundColor&quot;:[&quot;rgb(255,71,0,0.6)&quot;],&quot;data&quot;:[0]}]}")</script>
+                                    </canvas>
+                                </div>
+                            </div>
+            </div>
+
+            <div style="border-bottom: 1px solid #d9d9d9; padding-bottom: 10px;">
+                <h2>Test Environment</h2>
+                <h3>benchmark config</h3>
+                <pre id="benchmarkInfo" style="overflow: visible;white-space: pre-wrap;max-height:100%;">name: caliper_benchmark
+description: test_benchmark
+workers:
+  type: local
+  number: 2
+rounds:
+  - label: readAsset
+    description: Read Asset benchmark
+    chaincodeId: patientprofile_cc
+    txDuration: 20
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 600
+    callback: benchmarks&#x2F;callbacks&#x2F;readAssetBenchmark.js
+    arguments:
+      assets: 10
+      seed: 1212
+  - label: createAsset
+    description: Create Asset benchmark
+    chaincodeId: patientprofile_cc
+    txDuration: 20
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 90
+    callback: benchmarks&#x2F;callbacks&#x2F;createAssetBenchmark.js
+    arguments:
+      assets: 10
+  - label: emergencyDetection
+    description: Emergency Detection benchmark
+    chaincodeId: emergencydetection_cc
+    txDuration: 20
+    rateControl:
+      type: fixed-rate
+      opts:
+        tps: 5
+    callback: benchmarks&#x2F;callbacks&#x2F;emergencyDetectionBenchmark.js
+    arguments:
+      assets: 10
+      seed: 1212
+</pre>
+                <h3>SUT</h3>
+                <pre id="sutdetails">not provided</pre>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
