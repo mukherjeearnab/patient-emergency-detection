@@ -4,6 +4,7 @@ Organizations:
       Name: OrdererOrg
       ID: OrdererMSP
       MSPDir: crypto-config/ordererOrganizations/health.com/msp
+      AdminPrincipal: Role.MEMBER
       Policies:
           Readers:
               Type: Signature
@@ -109,6 +110,8 @@ Orderer: &OrdererDefaults
     OrdererType: etcdraft
     Addresses:
         - orderer0.health.com:7050
+        - orderer1.example.com:7050
+        - orderer2.example.com:7050
 
     BatchTimeout: 250ms
     BatchSize:
@@ -123,6 +126,14 @@ Orderer: &OrdererDefaults
               Port: 7050
               ClientTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/server.crt
               ServerTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/server.crt
+            - Host: orderer1.health.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com/tls/server.crt
+            - Host: orderer2.health.com
+              Port: 7050
+              ClientTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com/tls/server.crt
 
     Organizations:
 
