@@ -7,10 +7,36 @@ services:
             file: peer-base.yaml
             service: orderer-base
         volumes:
-            - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer0.genesis.block
+            - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/msp:/var/hyperledger/orderer/msp
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer0.health.com/tls/:/var/hyperledger/orderer/tls
             - orderer0.health.com:/var/hyperledger/production/orderer
+        ports:
+            - 7050:7050
+
+    orderer1.health.com:
+        container_name: orderer1.health.com
+        extends:
+            file: peer-base.yaml
+            service: orderer-base
+        volumes:
+            - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com/msp:/var/hyperledger/orderer/msp
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com/tls/:/var/hyperledger/orderer/tls
+            - orderer1.health.com:/var/hyperledger/production/orderer
+        ports:
+            - 7050:7050
+
+    orderer2.health.com:
+        container_name: orderer2.health.com
+        extends:
+            file: peer-base.yaml
+            service: orderer-base
+        volumes:
+            - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/genesis.block
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com/msp:/var/hyperledger/orderer/msp
+            - ../crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com/tls/:/var/hyperledger/orderer/tls
+            - orderer2.health.com:/var/hyperledger/production/orderer
         ports:
             - 7050:7050
 

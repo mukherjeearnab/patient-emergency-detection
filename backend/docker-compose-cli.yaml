@@ -28,6 +28,32 @@ services:
             - ca.hospital.health.com
             - ca.healthadmin.health.com
 
+    orderer1.health.com:
+        extends:
+            file: base/docker-compose-base.yaml
+            service: orderer1.health.com
+        container_name: orderer1.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - ca.patient.health.com
+            - ca.phc.health.com
+            - ca.hospital.health.com
+            - ca.healthadmin.health.com
+
+    orderer2.health.com:
+        extends:
+            file: base/docker-compose-base.yaml
+            service: orderer2.health.com
+        container_name: orderer2.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - ca.patient.health.com
+            - ca.phc.health.com
+            - ca.hospital.health.com
+            - ca.healthadmin.health.com
+
     peer0.patient.health.com:
         container_name: peer0.patient.health.com
         extends:
