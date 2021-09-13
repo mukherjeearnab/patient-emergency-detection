@@ -1,16 +1,16 @@
 testConfig: &testConfig
-    rtps: &test_rtps 50
-    ctps: &test_ctps 5
-    etps: &test_etps 50
+    rtps: &test_rtps 250
+    ctps: &test_ctps 25
+    # etps: &test_etps 500
     txDuration: &test_txduration 20
-    seed: &test_seed 1
+    seed: &test_seed 100000000
 
 test:
     name: caliper_benchmark
     description: test_benchmark
     workers:
         type: local
-        number: 2
+        number: 10
     rounds:
         - label: readAsset
           description: Read Asset benchmark
@@ -35,18 +35,18 @@ test:
           callback: benchmarks/callbacks/createAssetBenchmark.js
           arguments:
               assets: 10
-        - label: emergencyDetection
-          description: Emergency Detection benchmark
-          chaincodeId: emergencydetection_cc
-          txDuration: *test_txduration
-          rateControl:
-              type: fixed-rate
-              opts:
-                  tps: *test_etps
-          callback: benchmarks/callbacks/emergencyDetectionBenchmark.js
-          arguments:
-              assets: 10
-              seed: *test_seed
+        # - label: emergencyDetection
+        #   description: Emergency Detection benchmark
+        #   chaincodeId: emergencydetection_cc
+        #   txDuration: *test_txduration
+        #   rateControl:
+        #       type: fixed-rate
+        #       opts:
+        #           tps: *test_etps
+        #   callback: benchmarks/callbacks/emergencyDetectionBenchmark.js
+        #   arguments:
+        #       assets: 10
+        #       seed: *test_seed
 
 monitor:
     type:
