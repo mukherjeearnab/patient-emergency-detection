@@ -25,7 +25,7 @@ services:
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com/tls/:/var/hyperledger/orderer/tls
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer1.health.com:/var/hyperledger/production/orderer
         ports:
-            - 7050:7050
+            - 8050:7050
 
     orderer2.health.com:
         container_name: orderer2.health.com
@@ -38,7 +38,7 @@ services:
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com/tls/:/var/hyperledger/orderer/tls
             - ../crypto-config/ordererOrganizations/health.com/orderers/orderer2.health.com:/var/hyperledger/production/orderer
         ports:
-            - 7050:7050
+            - 9050:7050
 
     peer0.patient.health.com:
         container_name: peer0.patient.health.com
