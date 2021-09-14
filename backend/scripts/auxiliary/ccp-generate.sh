@@ -19,7 +19,7 @@ function json_ccp {
 ORG=patient
 ORGMSP=Patient
 P0PORT=7051
-CAPORT=7054
+CAPORT=7059
 PEERPEM=../crypto-config/peerOrganizations/patient.health.com/tlsca/tlsca.patient.health.com-cert.pem
 CAPEM=../crypto-config/peerOrganizations/patient.health.com/ca/ca.patient.health.com-cert.pem
 
@@ -28,7 +28,7 @@ echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connectio
 ORG=phc
 ORGMSP=PHC
 P0PORT=8051
-CAPORT=8054
+CAPORT=8059
 PEERPEM=../crypto-config/peerOrganizations/phc.health.com/tlsca/tlsca.phc.health.com-cert.pem
 CAPEM=../crypto-config/peerOrganizations/phc.health.com/ca/ca.phc.health.com-cert.pem
 
@@ -36,7 +36,7 @@ echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connectio
 ORG=hospital
 ORGMSP=Hospital
 P0PORT=9051
-CAPORT=9054
+CAPORT=9059
 PEERPEM=../crypto-config/peerOrganizations/hospital.health.com/tlsca/tlsca.hospital.health.com-cert.pem
 CAPEM=../crypto-config/peerOrganizations/hospital.health.com/ca/ca.hospital.health.com-cert.pem
 
@@ -45,7 +45,7 @@ echo "$(json_ccp $ORG $ORGMSP $P0PORT $CAPORT $PEERPEM $CAPEM)" >../../connectio
 ORG=healthadmin
 ORGMSP=HealthAdmin
 P0PORT=10051
-CAPORT=10054
+CAPORT=10059
 PEERPEM=../crypto-config/peerOrganizations/healthadmin.health.com/tlsca/tlsca.healthadmin.health.com-cert.pem
 CAPEM=../crypto-config/peerOrganizations/healthadmin.health.com/ca/ca.healthadmin.health.com-cert.pem
 

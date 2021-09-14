@@ -1,6 +1,6 @@
 {
     "name": "health-emergency-detection",
-    "version": "1.0.0",
+    "version": "1.2.0",
     "client": {
         "organization": "${ORG}",
         "connection": {
@@ -15,7 +15,8 @@
         "${ORG}": {
             "mspid": "${ORGMSP}MSP",
             "peers": [
-                "peer0.${ORG}.health.com"
+                "peer0.${ORG}.health.com",
+                "peer1.${ORG}.health.com"
             ],
             "certificateAuthorities": [
                 "ca.${ORG}.health.com"
@@ -26,11 +27,21 @@
         "peer0.${ORG}.health.com": {
             "url": "grpcs://localhost:${P0PORT}",
             "tlsCACerts": {
-                "pem": "${PEERPEM}"
+                "pem": "${PEERPEM0}"
             },
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.${ORG}.health.com",
                 "hostnameOverride": "peer0.${ORG}.health.com"
+            }
+        },
+        "peer1.${ORG}.health.com": {
+            "url": "grpcs://localhost:${P1PORT}",
+            "tlsCACerts": {
+                "pem": "${PEERPEM1}"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.${ORG}.health.com",
+                "hostnameOverride": "peer1.${ORG}.health.com"
             }
         }
     },
