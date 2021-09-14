@@ -29,10 +29,15 @@ for ORG in patient phc hospital healthadmin; do
     cd $CURRENT_DIR
     sed -i "s/C${INDEX}_PRIVATE_KEY/${PRIV_KEY}/g" networks/network_config.json
 
-    # SET PEERPEM
-    PEERPEM="../backend/crypto-config/peerOrganizations/${ORG}.health.com/tlsca/tlsca.${ORG}.health.com-cert.pem"
-    PP=$(one_line_pem $PEERPEM)
-    sed -i -e "s#PEERPEM${INDEX}#$PP#" networks/network_config.json
+    # SET PEER0PEM
+    PEER0PEM="../backend/crypto-config/peerOrganizations/${ORG}.health.com/tlsca/tlsca.${ORG}.health.com-cert.pem"
+    PP=$(one_line_pem $PEER0PEM)
+    sed -i -e "s#PEER0PEM${INDEX}#$PP#" networks/network_config.json
+	
+	# SET PEER1PEM
+    PEER1PEM="../backend/crypto-config/peerOrganizations/${ORG}.health.com/tlsca/tlsca.${ORG}.health.com-cert.pem"
+    PP=$(one_line_pem $PEER1PEM)
+    sed -i -e "s#PEER1PEM${INDEX}#$PP#" networks/network_config.json
 
     # SET CAPEM
     CAPEM="../backend/crypto-config/peerOrganizations/${ORG}.health.com/ca/ca.${ORG}.health.com-cert.pem"
