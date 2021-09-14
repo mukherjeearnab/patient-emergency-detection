@@ -98,6 +98,50 @@ services:
             - orderer0.health.com
             - couchdb.peer0.healthadmin.health.com
 
+    peer1.patient.health.com:
+        container_name: peer1.patient.health.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer1.patient.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - orderer0.health.com
+            - couchdb.peer1.patient.health.com
+
+    peer1.phc.health.com:
+        container_name: peer1.phc.health.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer1.phc.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - orderer0.health.com
+            - couchdb.peer1.phc.health.com
+
+    peer1.hospital.health.com:
+        container_name: peer1.hospital.health.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer1.hospital.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - orderer0.health.com
+            - couchdb.peer1.hospital.health.com
+
+    peer1.healthadmin.health.com:
+        container_name: peer1.healthadmin.health.com
+        extends:
+            file: base/docker-compose-base.yaml
+            service: peer1.healthadmin.health.com
+        networks:
+            - healthnet
+        depends_on:
+            - orderer0.health.com
+            - couchdb.peer1.healthadmin.health.com
+
     ca.patient.health.com:
         container_name: ca.patient.health.com
         extends:
@@ -174,6 +218,50 @@ services:
         networks:
             - healthnet
 
+    couchdb.peer1.patient.health.com:
+        container_name: couchdb.peer1.patient.health.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "5985:5984"
+        networks:
+            - healthnet
+
+    couchdb.peer1.phc.health.com:
+        container_name: couchdb.peer1.phc.health.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "6985:5984"
+        networks:
+            - healthnet
+
+    couchdb.peer1.hospital.health.com:
+        container_name: couchdb.peer1.hospital.health.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "7985:5984"
+        networks:
+            - healthnet
+
+    couchdb.peer1.healthadmin.health.com:
+        container_name: couchdb.peer1.healthadmin.health.com
+        image: hyperledger/fabric-couchdb
+        environment:
+            - COUCHDB_USER=admin
+            - COUCHDB_PASSWORD=adminpw
+        ports:
+            - "8985:5984"
+        networks:
+            - healthnet
+
     cli:
         container_name: cli
         image: hyperledger/fabric-tools:$IMAGE_TAG
@@ -202,10 +290,16 @@ services:
             - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
         depends_on:
             - orderer0.health.com
+            - orderer1.health.com
+            - orderer2.health.com
             - peer0.patient.health.com
             - peer0.phc.health.com
             - peer0.hospital.health.com
             - peer0.healthadmin.health.com
+            - peer1.patient.health.com
+            - peer1.phc.health.com
+            - peer1.hospital.health.com
+            - peer1.healthadmin.health.com
             - ca.patient.health.com
             - ca.phc.health.com
             - ca.hospital.health.com
