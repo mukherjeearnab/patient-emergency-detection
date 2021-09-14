@@ -2,10 +2,16 @@ version: "2"
 
 volumes:
     orderer0.health.com:
+    orderer1.health.com:
+    orderer2.health.com:
     peer0.patient.health.com:
     peer0.phc.health.com:
     peer0.hospital.health.com:
     peer0.healthadmin.health.com:
+    peer1.patient.health.com:
+    peer1.phc.health.com:
+    peer1.hospital.health.com:
+    peer1.healthadmin.health.com:
     ca.patient.health.com:
     ca.phc.health.com:
     ca.hospital.health.com:
