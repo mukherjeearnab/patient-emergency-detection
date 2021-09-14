@@ -144,6 +144,110 @@ services:
         ports:
             - 10051:10051
 
+    peer1.patient.health.com:
+        container_name: peer1.patient.health.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer1.patient.health.com
+            - CORE_PEER_ADDRESS=peer1.patient.health.com:7053
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:7053
+            - CORE_PEER_CHAINCODEADDRESS=peer1.patient.health.com:7054
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7054
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer1.phc.health.com:8053
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.patient.health.com:7053
+            - CORE_PEER_LOCALMSPID=PatientMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.patient.health.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/patient.health.com/peers/peer1.patient.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/patient.health.com/peers/peer1.patient.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer1.patient.health.com:/var/hyperledger/production
+        ports:
+            - 7053:7053
+
+    peer1.phc.health.com:
+        container_name: peer1.phc.health.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer1.phc.health.com
+            - CORE_PEER_ADDRESS=peer1.phc.health.com:8053
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:8053
+            - CORE_PEER_CHAINCODEADDRESS=peer1.phc.health.com:8054
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8054
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.phc.health.com:8053
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer1.patient.health.com:7053
+            - CORE_PEER_LOCALMSPID=PHCMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.phc.health.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/phc.health.com/peers/peer1.phc.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/phc.health.com/peers/peer1.phc.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer1.phc.health.com:/var/hyperledger/production
+        ports:
+            - 8053:8053
+
+    peer1.hospital.health.com:
+        container_name: peer1.hospital.health.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer1.hospital.health.com
+            - CORE_PEER_ADDRESS=peer1.hospital.health.com:9053
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:9053
+            - CORE_PEER_CHAINCODEADDRESS=peer1.hospital.health.com:9054
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:9054
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.hospital.health.com:9053
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer1.patient.health.com:7053
+            - CORE_PEER_LOCALMSPID=HospitalMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.hospital.health.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/hospital.health.com/peers/peer1.hospital.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/hospital.health.com/peers/peer1.hospital.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer1.hospital.health.com:/var/hyperledger/production
+        ports:
+            - 9053:9053
+
+    peer1.healthadmin.health.com:
+        container_name: peer1.healthadmin.health.com
+        extends:
+            file: peer-base.yaml
+            service: peer-base
+        environment:
+            - CORE_PEER_ID=peer1.healthadmin.health.com
+            - CORE_PEER_ADDRESS=peer1.healthadmin.health.com:10053
+            - CORE_PEER_LISTENADDRESS=0.0.0.0:10053
+            - CORE_PEER_CHAINCODEADDRESS=peer1.healthadmin.health.com:10054
+            - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:10054
+            - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.healthadmin.health.com:10053
+            #- CORE_PEER_GOSSIP_BOOTSTRAP=peer1.patient.health.com:7053
+            - CORE_PEER_LOCALMSPID=HealthAdminMSP
+            - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer1.healthadmin.health.com:5984
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=admin
+            - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=adminpw
+        volumes:
+            - /var/run/:/host/var/run/
+            - ../crypto-config/peerOrganizations/healthadmin.health.com/peers/peer1.healthadmin.health.com/msp:/etc/hyperledger/fabric/msp
+            - ../crypto-config/peerOrganizations/healthadmin.health.com/peers/peer1.healthadmin.health.com/tls:/etc/hyperledger/fabric/tls
+            - peer1.healthadmin.health.com:/var/hyperledger/production
+        ports:
+            - 10053:10053
+
     ca.patient.health.com:
         image: hyperledger/fabric-ca:$IMAGE_TAG
         environment:
