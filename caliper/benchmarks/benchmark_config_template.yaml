@@ -1,6 +1,6 @@
 testConfig: &testConfig
-    rtps: &test_rtps RUNTPS
-    ctps: &test_ctps RUNTPS0
+    rtps: &test_rtps RUNTPS0
+    ctps: &test_ctps RUNTPS
     # etps: &test_etps 500
     txDuration: &test_txduration 20
     seed: &test_seed SEED
