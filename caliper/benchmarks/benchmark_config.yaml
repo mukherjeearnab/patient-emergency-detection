@@ -1,9 +1,9 @@
 testConfig: &testConfig
-    rtps: &test_rtps 50
-    ctps: &test_ctps 500
+    rtps: &test_rtps 25
+    ctps: &test_ctps 250
     # etps: &test_etps 500
     txDuration: &test_txduration 20
-    seed: &test_seed 50
+    seed: &test_seed 251638868342
 
 test:
     name: caliper_benchmark

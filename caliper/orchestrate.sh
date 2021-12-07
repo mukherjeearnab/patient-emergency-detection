@@ -9,7 +9,7 @@ echo "" > report.txt
 
 for i in {25..300..25}
     do 
-        DD = date +%s 
+        DD="$(date +%s)" 
         echo "Running $i TPS at $DD"
         # echo "$(create_config $i $i)" > ./benchmarks/benchmark_config.yaml
         bash create_benchmark_config.sh $i $i$DD > ./benchmarks/benchmark_config.yaml
